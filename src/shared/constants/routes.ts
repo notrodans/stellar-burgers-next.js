@@ -1,0 +1,16 @@
+export const ROUTER_PATHS = {
+  HOME: "/",
+  FEED: "/feed",
+  FEED_ORDER_BY_ID: "/feed/:id",
+  INGREDIENTS: "/ingredients",
+  INGREDIENT_BY_ID: "/ingredients/:id",
+  PROFILE: "/profile",
+  PROFILE_ORDERS: "/profile/orders",
+  PROFILE_ORDER_BY_ID: "/profile/orders/:id",
+  SIGN_IN: "/login",
+  SIGN_UP: "/register",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
+  404: "/not-found",
+  403: "/forbidden",
+};

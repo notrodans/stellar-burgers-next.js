@@ -1,0 +1,418 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Full API - Users, Sessions and Burgers))
+  # description: API for managing 
+
+servers:
+  - url: /api
+
+paths:
+  /ingredients:
+    get:
+      tags:
+        - Ingredients
+      summary: Get list of all available ingredients
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/IngredientObjectDto'
+                required:
+                  - success
+                  - data
+  /auth/user:
+    get:
+      tags: [User]
+      summary: Get current user data
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/UserObjectDto'
+                required: [user]
+    patch:
+      tags: [User]
+      summary: Update user data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserObjectWithPasswordDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/UserObjectDto'
+                required: [user]
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginFormDataDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithTokensDto'
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserObjectWithPasswordDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithTokensDto'
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: User logout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+              required: [token]
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required: [message]
+
+  /password-reset:
+    post:
+      tags: [Auth]
+      summary: Request password reset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+              required: [email]
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required: [message]
+
+  /password-reset/reset:
+    post:
+      tags: [Auth]
+      summary: Reset password with token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordWithToken'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required: [message]
+
+  /orders:
+    post:
+      tags: [Orders]
+      summary: Create new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ingredients:
+                  type: array
+                  items:
+                    type: string
+                    example: "60d3b41abdacab0026a733c6"
+              required: [ingredients]
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderObjectDto'
+
+  /orders/{id}:
+    get:
+      tags: [Orders]
+      summary: Get order details by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DetailedOrderObjectDto'
+                required: [orders]
+
+components:
+  schemas:
+    IngredientType:
+      type: string
+      enum: [bun, sauce, main]
+      description: Type of the ingredient
+    
+    IngredientObjectDto:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "60d3b41abdacab0026a733c6"
+        name:
+          type: string
+          example: "Краторная булка N-200i"
+        type:
+          $ref: '#/components/schemas/IngredientType'
+        proteins:
+          type: number
+          example: 80
+        fat:
+          type: number
+          example: 24
+        carbohydrates:
+          type: number
+          example: 53
+        calories:
+          type: number
+          example: 420
+        price:
+          type: number
+          example: 1255
+        image:
+          type: string
+          example: "https://code.s3.yandex.net/react/code/bun-02.png"
+        image_mobile:
+          type: string
+          example: "https://code.s3.yandex.net/react/code/bun-02-mobile.png"
+        image_large:
+          type: string
+          example: "https://code.s3.yandex.net/react/code/bun-02-large.png"
+        __v:
+          type: number
+          example: 0
+        uniqueId:
+          type: string
+          description: Optional unique identifier for frontend usage
+          example: "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6"
+      required: [_id, name, type, proteins, fat, carbohydrates, calories, price, image, image_mobile, image_large, __v]
+
+    UserObjectDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+      required: [email, name]
+
+    LoginFormDataDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required: [email, password]
+
+    UserObjectWithPasswordDto:
+      allOf:
+        - $ref: '#/components/schemas/UserObjectDto'
+        - type: object
+          properties:
+            password:
+              type: string
+              format: password
+          required: [password]
+
+    PasswordWithToken:
+      type: object
+      properties:
+        password:
+          type: string
+          format: password
+        token:
+          type: string
+      required: [password, token]
+
+    TokenObjectDto:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+      required: [accessToken, refreshToken]
+
+    UserWithTokensDto:
+      allOf:
+        - $ref: '#/components/schemas/TokenObjectDto'
+        - type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/UserObjectDto'
+          required: [user]
+
+    OrderObjectDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Space флюоресцентный бургер"
+        order:
+          type: object
+          properties:
+            number:
+              type: number
+              example: 12345
+          required: [number]
+      required: [name, order]
+
+    DetailedOrderObjectDto:
+      type: object
+      properties:
+        ingredients:
+          type: array
+          items:
+            type: string
+            example: "60d3b41abdacab0026a733c6"
+        _id:
+          type: string
+          example: "611a9a9b9b9b9b9b9b9b9b9b"
+        name:
+          type: string
+          example: "Space флюоресцентный бургер"
+        status:
+          type: string
+          enum: [done, pending, created]
+          example: "done"
+        number:
+          type: number
+          example: 12345
+        createdAt:
+          type: string
+          format: date-time
+          example: "2021-08-15T12:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2021-08-15T12:00:00.000Z"
+      required:
+        - ingredients
+        - _id
+        - name
+        - status
+        - number
+        - createdAt
+        - updatedAt
+
+    OrderID:
+      type: string
+      description: Unique identifier for order
+      example: "611a9a9b9b9b9b9b9b9b9b9b"
+
+    Timestamp:
+      type: string
+      format: date-time
+      description: ISO 8601 timestamp
+      example: "2021-08-15T12:00:00.000Z"
+
+    IngredientID:
+      type: string
+      description: Reference to ingredient
+      example: "60d3b41abdacab0026a733c6"
+
+    ApiError:
+      type: object
+      description: Error response
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required: [message, status]
+
