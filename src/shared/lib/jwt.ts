@@ -22,7 +22,5 @@ export async function decrypt<T extends object = object>(
       algorithms: ["HS256"],
     });
     return payload as Payload<T>;
-  } catch {
-    console.log("Failed to verify session");
-  }
+  } catch {}
 }

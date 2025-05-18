@@ -1,4 +1,6 @@
-import type { IngredientObject } from "@/entities/ingredient";
+import type { IngredientObject } from "~/entities/ingredient";
 
-export interface IngredientDetailsProps
-  extends Pick<IngredientObject, "name" | "image" | "price" | "type" | "_id"> {}
+export type IngredientDetailsProps = Pick<
+  IngredientObject,
+  "name" | "image" | "price" | "type" | "_id"
+>;

@@ -129,6 +129,32 @@ paths:
                     type: string
                 required: [message]
 
+  /auth/token:
+    post:
+      tags:
+        - Auth
+      summary: Refresh access token
+      description: Exchange refresh token for new access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: Tokens refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObjectDto'
+        '403':
+          description: Invalid or expired refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
   /password-reset:
     post:
       tags: [Auth]
@@ -327,6 +353,15 @@ components:
         refreshToken:
           type: string
       required: [accessToken, refreshToken]
+
+    RefreshTokenRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Valid refresh token
+      required:
+        - token
 
     UserWithTokensDto:
       allOf:

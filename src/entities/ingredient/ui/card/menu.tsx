@@ -33,7 +33,7 @@ export const Ingredient: React.FC<IngredientProps> = ({
         className="flex flex-col justify-center items-center gap-2"
       >
         {counterSlot}
-        <Image src={image} alt={name} />
+        <Image width={229} height={114} src={image} alt={name} />
         <IngredientPrice value={price} />
         <Paragraph size="small" className="text-center">
           {name}

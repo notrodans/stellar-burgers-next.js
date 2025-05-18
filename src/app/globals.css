@@ -5,6 +5,17 @@
   --foreground: #171717;
 }
 
+@layer base {
+  html {
+    @apply text-white bg-primary;
+  }
+}
+
+@utility container {
+  margin-inline: auto;
+  max-width: 1240px;
+}
+
 @theme {
   --color-transparent: transparent;
   --color-white: #fff;
@@ -22,7 +33,37 @@
 @media (prefers-color-scheme: dark) {
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+.text-shadow {
+  text-shadow:
+    0 0 16px rgba(51, 51, 255, 0.25),
+    0 0 8px rgba(51, 51, 255, 0.25),
+    0 4px 32px rgba(51, 51, 255, 0.5);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #8585ad #2f2f37;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+  border-radius: 0px;
+  border: 0px none #ffffff;
+}
+
+::selection {
+  background: #801ab3;
+}
+
+::-moz-selection {
+  background: #801ab3;
 }

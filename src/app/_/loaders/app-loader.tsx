@@ -1,63 +1,69 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { IngredientObject, IngredientsProvider } from "~/entities/ingredient";
-import { Session, SessionProvider } from "~/entities/session";
 import { api } from "~/shared/api";
 import { Loader } from "~/shared/ui";
+import { User, UserProvider } from "~/entities/user";
+import { Session, SessionProvider } from "~/entities/session";
+import { IngredientObject, IngredientsProvider } from "~/entities/ingredient";
 import { useApplayAppInterceptor } from "../interceptors/app-interceptor";
 
 export function AppLoader({
-  data,
+  data: { session },
   children,
 }: {
-  data: { session?: Session | undefined };
+  data: { session: Session | undefined };
   children: React.ReactNode;
 }) {
-  const [session, setSession] = useState<Session | undefined>(data?.session);
+  const [user, setUser] = useState<User | null>(null);
   const [ingredients, setIngredients] = useState<IngredientObject[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isIngredientsLoading, setIsIngredientsLoading] =
+    useState<boolean>(true);
+  const [isUserLoading, setIsUserLoading] = useState<boolean>(true);
 
-  const isData = !!data?.session;
-
-  useApplayAppInterceptor();
+  useApplayAppInterceptor({ session });
 
   useEffect(() => {
-    if (!isData) return;
+    const token = session?.accessToken;
+    if (!token) return setIsUserLoading(false);
 
-    setIsLoading(true);
+    api
+      .getAuthUser({
+        headers: {
+          Authorization: `${token}`,
+        },
+      })
+      .then((res) => {
+        setUser(res.user);
+      })
+      .finally(() => {
+        setIsUserLoading(false);
+      });
+  }, [session]);
 
-    const getIngredients = api.getIngredients.bind(null);
-    const getAuthUser = api.getAuthUser.bind(null, {
-      headers: {
-        Authorization: `${session?.accessToken}`,
-      },
-    });
-
-    Promise.all([getIngredients(), getAuthUser()])
-      .then(([{ data }, { user }]) => {
-        setSession((prev) => {
-          if (!prev) return;
-          return {
-            ...prev,
-            ...user,
-          };
-        });
+  useEffect(() => {
+    api
+      .getIngredients()
+      .then(({ data }) => {
         setIngredients(data);
       })
       .finally(() => {
-        setIsLoading(false);
+        setIsIngredientsLoading(false);
       });
-  }, [isData, session?.accessToken]);
+  }, []);
+
+  const isDataFetching = isUserLoading || isIngredientsLoading;
 
   return (
     <>
-      {isLoading && <Loader screen />}
-      {!isLoading ? (
+      {isDataFetching && <Loader screen />}
+      {!isDataFetching ? (
         <SessionProvider value={{ session }}>
-          <IngredientsProvider value={{ ingredients }}>
-            {children}
-          </IngredientsProvider>
+          <UserProvider value={{ user }}>
+            <IngredientsProvider value={{ ingredients }}>
+              {children}
+            </IngredientsProvider>
+          </UserProvider>
         </SessionProvider>
       ) : null}
     </>

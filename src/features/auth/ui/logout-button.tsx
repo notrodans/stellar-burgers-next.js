@@ -1,3 +1,5 @@
+"use client";
+
 import { useSession } from "~/entities/session";
 import { CONSTANTS_MAP } from "~/shared/constants";
 

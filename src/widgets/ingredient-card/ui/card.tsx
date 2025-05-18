@@ -1,7 +1,10 @@
-import { MobileButtonAdd, useIngredientDrag } from "~/features/constructor/add";
-import { Counter } from "~/features/constructor/counter";
-import { MobileButtonRemove } from "~/features/constructor/remove";
 import { Ingredient } from "~/entities/ingredient";
+import {
+  Counter,
+  MobileButtonAdd,
+  MobileButtonRemove,
+  useIngredientDrag,
+} from "~/features/constructor-manager";
 import type { IngredientDetailsProps } from "../model";
 
 export const IngredientDetails: React.FC<IngredientDetailsProps> = ({

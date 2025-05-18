@@ -2,7 +2,7 @@
 
 import { PasswordInput } from "~/entities/user";
 import { cn } from "~/shared/lib/css";
-import { CONSTANTS_MAP } from "~/shared/constants";
+import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
 import { Input, Button, Alert } from "~/shared/ui";
 import { api } from "~/shared/api";
 import { useSession } from "~/entities/session";
@@ -24,22 +24,29 @@ const initialState: InitialState = {
 export const LoginForm: React.FC = () => {
   const setCurrentSession = useSession((s) => s.setCurrentSession);
   const [isAlertHide, setIsAlertHide] = useState<boolean>(false);
-  const { loginButton, errorHeadingText } = CONSTANTS_MAP.features.auth.login;
   const router = useRouter();
 
+  const { loginButton, errorHeadingText } = CONSTANTS_MAP.features.auth.login;
+
+  // TODO: Вынести в отдельный хук
+
   const fetchFn = useCallback(
-    async (initialState: InitialState, formData: FormData) => {
+    async (initialState: InitialState, payload: FormData) => {
       return api
         .postAuthLogin({
-          email: formData.get("email") as string,
-          password: formData.get("password") as string,
+          email: payload.get("email") as string,
+          password: payload.get("password") as string,
         })
         .then(async (res) => {
-          await setCurrentSession({
-            ...res.user,
-            accessToken: res.accessToken,
-            refreshToken: res.refreshToken,
-          });
+          await setCurrentSession(
+            {
+              ...res.user,
+              accessToken: res.accessToken,
+              refreshToken: res.refreshToken,
+            },
+            { path: ROUTER_PATHS.HOME, type: "layout" },
+          ).then(() => router.replace(ROUTER_PATHS.HOME));
+
           return {
             ...initialState,
             error: null,
@@ -51,12 +58,9 @@ export const LoginForm: React.FC = () => {
             ...initialState,
             error: err as ApiError,
           };
-        })
-        .finally(() => {
-          router.push("/");
         });
     },
-    [setCurrentSession, router],
+    [router, setCurrentSession],
   );
 
   const [state, formAction, isLoading] = useActionState(fetchFn, initialState);

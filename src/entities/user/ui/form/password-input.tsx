@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { Input } from "~/shared/ui";
 import { CustomInputProps } from "../../model/types";

@@ -1,1 +1,1 @@
-// export { MemoizedConstructorElement } from "./card";
+export { MemoizedConstructorElement } from "./card";

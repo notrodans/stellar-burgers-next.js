@@ -14,7 +14,7 @@ export type AlertProps = BaseProps &
   (
     | {
         icon: IconName;
-        onButtonClick: () => void;
+        onButtonClick: (() => void) | undefined;
       }
     | {
         icon?: undefined;

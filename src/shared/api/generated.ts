@@ -12,6 +12,7 @@ import type { BodyType } from "./api-instance";
 export type IngredientType =
   (typeof IngredientType)[keyof typeof IngredientType];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const IngredientType = {
   bun: "bun",
   sauce: "sauce",
@@ -62,6 +63,11 @@ export interface TokenObjectDto {
   refreshToken: string;
 }
 
+export interface RefreshTokenRequest {
+  /** Valid refresh token */
+  token: string;
+}
+
 export type UserWithTokensDtoAllOf = {
   user: UserObjectDto;
 };
@@ -80,6 +86,7 @@ export interface OrderObjectDto {
 export type DetailedOrderObjectDtoStatus =
   (typeof DetailedOrderObjectDtoStatus)[keyof typeof DetailedOrderObjectDtoStatus];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const DetailedOrderObjectDtoStatus = {
   done: "done",
   pending: "pending",
@@ -259,6 +266,25 @@ export const postAuthLogout = (
 };
 
 /**
+ * Exchange refresh token for new access token
+ * @summary Refresh access token
+ */
+export const postAuthToken = (
+  refreshTokenRequest: BodyType<RefreshTokenRequest>,
+  options?: SecondParameter<typeof createInstance>,
+) => {
+  return createInstance<TokenObjectDto>(
+    {
+      url: `/auth/token`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: refreshTokenRequest,
+    },
+    options,
+  );
+};
+
+/**
  * @summary Request password reset
  */
 export const postPasswordReset = (
@@ -342,6 +368,9 @@ export type PostAuthRegisterResult = NonNullable<
 >;
 export type PostAuthLogoutResult = NonNullable<
   Awaited<ReturnType<typeof postAuthLogout>>
+>;
+export type PostAuthTokenResult = NonNullable<
+  Awaited<ReturnType<typeof postAuthToken>>
 >;
 export type PostPasswordResetResult = NonNullable<
   Awaited<ReturnType<typeof postPasswordReset>>

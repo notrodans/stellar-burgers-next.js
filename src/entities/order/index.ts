@@ -1,1 +1,1 @@
-export { Order } from "./ui/card";
+export { Order, OrderModalContent } from "./ui";

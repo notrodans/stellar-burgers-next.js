@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [new URL("https://code.s3.yandex.net/**")],
+  },
+  eslint: { ignoreDuringBuilds: true },
   reactStrictMode: true,
   // async redirects() {
   //   return [
@@ -13,7 +17,6 @@ const nextConfig: NextConfig = {
   // },
   async rewrites() {
     const BASE_API_URL = process.env.BASE_API_URL || "http://localhost:3000";
-    console.log(BASE_API_URL, "api url");
     return [
       {
         source: "/api/:path*",

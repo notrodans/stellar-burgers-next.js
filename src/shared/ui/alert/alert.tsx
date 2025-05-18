@@ -6,10 +6,22 @@ import { AlertProps } from "./types";
 import { alertVariants } from "./variants";
 
 export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
-  ({ heading, text, icon, className, variant, ...props }, ref) => {
+  (
+    {
+      heading,
+      text,
+      icon,
+      className,
+      variant,
+      // @ts-expect-error needed
+      onButtonClick = undefined,
+      ...props
+    },
+    ref,
+  ) => {
     const IconComponent = icon && ICONS_MAP[icon];
     const handleButtonClick =
-      icon && "onButtonClick" in props ? props.onButtonClick : undefined;
+      icon && typeof onButtonClick === "function" && onButtonClick;
 
     return (
       <div
@@ -19,7 +31,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
         {...props}
       >
         {IconComponent && handleButtonClick ? (
-          <button type="button" onClick={handleButtonClick}>
+          <button onClick={onButtonClick} type="button">
             <IconComponent />
           </button>
         ) : null}

@@ -1,6 +1,6 @@
+import { IngredientID } from "~/shared/api/generated";
+
 export type Ingredient = {
-  _id: string;
+  _id: IngredientID;
   uniqueId: string;
 };
-
-export type Bun = string;

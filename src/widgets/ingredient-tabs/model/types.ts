@@ -1,6 +1,6 @@
 export type HandleScrollType = (
   setCurrent: (value: string) => void,
-  containerRef: React.RefObject<HTMLDivElement>,
+  containerRef: React.RefObject<HTMLDivElement | null>,
 ) => void;
 
 export type HandleClickType = (
@@ -9,5 +9,5 @@ export type HandleClickType = (
 ) => void;
 
 export interface TypeTabsProps {
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
 }

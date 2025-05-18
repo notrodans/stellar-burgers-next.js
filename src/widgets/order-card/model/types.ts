@@ -1,6 +1,6 @@
-import { DetailedOrderObject } from "~/entities/order";
+import { DetailedOrderObjectDto } from "~/shared/api/generated";
 
 export type OrderCardProps = Pick<
-  DetailedOrderObject,
+  DetailedOrderObjectDto,
   "name" | "number" | "status" | "createdAt" | "ingredients"
 >;

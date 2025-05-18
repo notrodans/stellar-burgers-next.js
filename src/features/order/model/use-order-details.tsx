@@ -1,3 +1,5 @@
+"use client";
+
 import { useConstructor } from "~/entities/constructor";
 
 export const useOrderDetails = () => {

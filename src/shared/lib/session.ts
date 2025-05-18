@@ -1,4 +1,4 @@
-import "server-only";
+"use server";
 
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
@@ -24,7 +24,7 @@ export async function setCookie(
   });
 }
 
-export async function createSession<T>(
+export async function createSession<T extends object = object>(
   data: Payload<T>,
   config: CookieConfig,
 ): Promise<void> {
@@ -32,7 +32,7 @@ export async function createSession<T>(
   await setCookie(config.name, session, config);
 }
 
-export async function updateSession<T extends object>(
+export async function updateSession<T extends object = object>(
   data: Payload<T>,
   config: CookieConfig & { maxAge: number },
 ): Promise<void | undefined> {
@@ -47,7 +47,7 @@ export async function updateSession<T extends object>(
   });
 }
 
-async function createCookieStorageFactory<T extends object = object>(
+async function createCookieStorageFactory<T extends object>(
   config: CreateSessionStorageConfig,
 ) {
   const sessionName = config.name;
@@ -69,10 +69,8 @@ async function createCookieStorageFactory<T extends object = object>(
   };
 
   const destroySession = async (): Promise<void> => {
-    await setCookie(sessionName, "", {
-      ...config,
-      maxAge: 0,
-    });
+    const cookiesStore = await cookies();
+    cookiesStore.delete(sessionName);
   };
 
   return {

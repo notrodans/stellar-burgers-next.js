@@ -1,3 +1,3 @@
-import { ProfileOrdersPage } from "~/screens/profile";
+import { ProfilePage } from "~/screens/profile";
 
-export default ProfileOrdersPage;
+export default ProfilePage;

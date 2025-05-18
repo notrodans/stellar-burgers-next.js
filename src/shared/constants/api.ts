@@ -12,3 +12,7 @@ export const API_ENTRYPOINTS = {
   GET_STREAMING_ORDERS: "orders/all",
   GET_STREAMING_USER_ORDERS: "orders",
 };
+
+export const API_MESSAGES = {
+  TOKEN_ERROR: "jwt expired",
+};

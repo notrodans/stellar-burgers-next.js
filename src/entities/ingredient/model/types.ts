@@ -25,7 +25,7 @@ export interface ConstructorIngredientProps
   priceSlot: React.ReactNode;
   actionSlot: React.ReactNode;
   dragSlot: React.ReactNode;
-  dragRef?: React.RefObject<HTMLDivElement>;
+  dragRef?: React.RefObject<HTMLDivElement | null>;
   className?: string;
 }
 
