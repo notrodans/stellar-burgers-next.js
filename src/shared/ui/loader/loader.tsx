@@ -13,7 +13,7 @@ export const Loader: React.FC<LoaderProps> = ({
     <div
       className={cn(
         "flex flex-col items-center justify-center animate-pulse gap-2 lg:gap-4",
-        screen && "h-screen",
+        screen && "fixed inset-0",
         className,
       )}
     >

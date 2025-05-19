@@ -1,10 +1,7 @@
-"use client";
-
 import { Paragraph } from "~/shared/ui";
-import type { OrderProps } from "../model/types";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import type { OrderProps } from "../model";
 import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
+import Link from "next/link";
 
 export const Order: React.FC<OrderProps> = ({
   number,
@@ -14,18 +11,11 @@ export const Order: React.FC<OrderProps> = ({
   priceSlot,
   ingredientSlot,
 }) => {
-  const pathname = usePathname();
   const statusByTag = CONSTANTS_MAP.entities.order.status[status];
 
   return (
     <Link
-      href={{
-        pathname:
-          pathname === ROUTER_PATHS.FEED
-            ? ROUTER_PATHS.FEED + `/${number}`
-            : ROUTER_PATHS.PROFILE_ORDERS + `/${number}`,
-        query: { background: pathname },
-      }}
+      href={`${ROUTER_PATHS.ORDER_BY_ID}/${number}`}
       className="block bg-dark rounded-3xl mx-2 mb-2"
     >
       <div className="flex flex-col gap-2 p-6">

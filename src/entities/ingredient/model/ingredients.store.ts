@@ -1,18 +1,14 @@
 import { create } from "zustand";
-import { createStoreContext } from "~/shared/lib/zustand";
 import { IngredientObject } from "./types";
 
 type IngredientsStore = {
   ingredients: IngredientObject[] | undefined;
-  loadIngredients: (ingredients: IngredientObject[]) => void;
+  setIngredients: (ingredients: IngredientObject[]) => void;
 };
 
-export const { useStore: useIngredients, Provider: IngredientsProvider } =
-  createStoreContext(({ ingredients }: { ingredients: IngredientObject[] }) =>
-    create<IngredientsStore>((set) => ({
-      ingredients,
-      loadIngredients: (ingredients) => {
-        set({ ingredients });
-      },
-    })),
-  );
+export const useIngredients = create<IngredientsStore>((set) => ({
+  ingredients: undefined,
+  setIngredients: (ingredients) => {
+    set({ ingredients });
+  },
+}));

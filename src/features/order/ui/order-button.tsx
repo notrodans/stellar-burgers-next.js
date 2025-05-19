@@ -8,7 +8,7 @@ import { useOrderDetails } from "../model/use-order-details";
 import { useRouter } from "next/navigation";
 import { useUser } from "~/entities/user";
 import { useConstructor } from "~/entities/constructor";
-import { useCreateOrder } from "../model/use-create-order";
+import { useCreateOrder } from "../model";
 import { OrderModalContent } from "~/entities/order";
 
 export const OrderButton: React.FC = () => {
@@ -21,14 +21,13 @@ export const OrderButton: React.FC = () => {
   const clearConstructor = useConstructor((s) => s.clearConstructor);
 
   const { isOrderable, ingredientIds } = useOrderDetails();
-  const [order, { data, isLoading, isError, error }] = useCreateOrder();
+  const { trigger: mutate, data, isLoading, error } = useCreateOrder();
 
   const router = useRouter();
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    order({ ingredients: ingredientIds });
-    setShowModal(true);
+    mutate({ ingredients: ingredientIds }).then(() => setShowModal(true));
   };
 
   return (
@@ -55,9 +54,7 @@ export const OrderButton: React.FC = () => {
               <Paragraph className="animate-pulse">{loadingText}</Paragraph>
             </div>
           )}
-          {isError && error && (
-            <Paragraph variant="error">{getApiError(error)}</Paragraph>
-          )}
+          {error && <Paragraph variant="error">{getApiError(error)}</Paragraph>}
           {data && <OrderModalContent name={data.name} order={data.order} />}
         </Modal>
       )}

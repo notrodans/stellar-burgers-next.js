@@ -1,21 +1,23 @@
 "use client";
+
 import { useSession } from "~/entities/session";
 import { ROUTER_PATHS } from "~/shared/constants";
-import { useEventCallback } from "~/shared/lib/react";
+import { useEventCallback } from "~/shared/lib";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Loader } from "~/shared/ui";
 
 export function PrivateLoader({ children }: { children?: React.ReactNode }) {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
   const session = useSession((s) => s.currentSession);
   const routerPush = useEventCallback(router.push);
 
   useEffect(() => {
-    if (!session) {
-      routerPush(ROUTER_PATHS.SIGN_IN);
-      return;
-    }
+    if (session) return setIsLoading(false);
+
+    routerPush(ROUTER_PATHS.SIGN_IN);
   }, [session, routerPush]);
 
-  return <>{children}</>;
+  return <>{isLoading ? <Loader screen /> : children}</>;
 }

@@ -1,11 +1,5 @@
-"use client";
-
-import { ConstructorProvider } from "~/entities/constructor";
+import { LocationStateProvider } from "~/shared/lib";
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <ConstructorProvider value={{ bun: null, ingredients: [] }}>
-      {children}
-    </ConstructorProvider>
-  );
+  return <LocationStateProvider>{children}</LocationStateProvider>;
 }

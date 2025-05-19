@@ -10,7 +10,7 @@ export const DesktopButtonRemove: React.FC<{ index?: number }> = ({
   const { removeIngredient } = useConstructor();
   return (
     <Button
-      onClick={() => removeIngredient("", index)}
+      onClick={() => removeIngredient({ index })}
       variant="link"
       size="icon"
       className="text-white ml-5 justify-end"
@@ -33,7 +33,7 @@ export const MobileButtonRemove: React.FC<Pick<IngredientObject, "_id">> = ({
     <Button
       variant="link"
       className="text-error p-0"
-      onClick={() => removeIngredient(_id)}
+      onClick={() => removeIngredient({ _id })}
     >
       {removeText}
     </Button>

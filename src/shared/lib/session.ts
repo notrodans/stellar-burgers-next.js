@@ -1,5 +1,4 @@
 "use server";
-
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
 import { decrypt, encrypt, type Payload, type SecretKey } from "./jwt";
@@ -47,7 +46,7 @@ export async function updateSession<T extends object = object>(
   });
 }
 
-async function createCookieStorageFactory<T extends object>(
+async function createCookieStorageFactory<T>(
   config: CreateSessionStorageConfig,
 ) {
   const sessionName = config.name;

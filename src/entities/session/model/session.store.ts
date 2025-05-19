@@ -6,7 +6,7 @@ import { createStoreContext } from "~/shared/lib/zustand";
 import { destroySession, commitSessionFn } from "./session.storage.server";
 
 export type SessionStore = {
-  currentSession: Session | undefined;
+  currentSession?: Session;
   setCurrentSession: (
     session: Session | undefined,
     revalidateParams?: { path: string; type?: "layout" | "page" },
@@ -19,9 +19,8 @@ export const { useStore: useSession, Provider: SessionProvider } =
     create<SessionStore>((set) => ({
       currentSession: session,
       setCurrentSession: async (session, revalidateParams) => {
-        if (!session) {
-          throw new Error("Session is undefined");
-        }
+        if (!session) return;
+
         return await commitSessionFn(session, revalidateParams).then(() => {
           set({ currentSession: session });
         });

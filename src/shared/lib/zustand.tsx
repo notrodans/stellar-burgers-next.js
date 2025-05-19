@@ -1,7 +1,7 @@
 "use client";
 
 import { StoreApi, UseBoundStore } from "zustand";
-import { createStrictContext, useStrictContext } from "./react";
+import { createStrictContext, useStrictContext } from "./react/";
 import { useState } from "react";
 
 export const createStoreContext = <S, P = void>(

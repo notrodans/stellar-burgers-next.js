@@ -1,8 +1,8 @@
-import { OrderObjectDto } from "~/shared/api/generated";
 import { CONSTANTS_MAP, ICONS_MAP } from "~/shared/constants";
 import { Paragraph } from "~/shared/ui";
+import { OrderModalProps } from "../model";
 
-export const OrderModalContent: React.FC<OrderObjectDto> = ({
+export const OrderModalContent: React.FC<OrderModalProps> = ({
   name,
   order,
 }) => {

@@ -7,7 +7,7 @@
 
 @layer base {
   html {
-    @apply text-white bg-primary;
+    @apply text-white bg-primary font-jetbrains;
   }
 }
 
@@ -28,6 +28,8 @@
   --color-error: #e52b1a;
   --color-accent: #4c4cff;
   --color-purple: #801ab3;
+  --font-jetbrains: "JetBrains Mono", "JetBrains Mono Fallback";
+  --font-iceland: "Iceland", "Iceland Fallback";
 }
 
 @media (prefers-color-scheme: dark) {

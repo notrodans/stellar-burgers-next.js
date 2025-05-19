@@ -1,9 +1,9 @@
-import { DetailedOrderObjectDtoStatus } from "~/shared/api/generated";
+import { DetailedOrderObjectStatus } from "~/shared/api/generated";
 
 type OrderObject = {
   name: string;
   number: number;
-  status: DetailedOrderObjectDtoStatus;
+  status: DetailedOrderObjectStatus;
 };
 
 export type OrderProps = {
@@ -11,3 +11,10 @@ export type OrderProps = {
   priceSlot: React.ReactNode;
   ingredientSlot: React.ReactNode;
 } & OrderObject;
+
+export type OrderModalProps = {
+  name: string;
+  order: {
+    number: number;
+  };
+};

@@ -4,6 +4,7 @@ const orvalConfig = {
     output: {
       target: "./src/shared/api/generated.ts",
       prettier: true,
+      client: "swr",
       override: {
         mutator: {
           path: "./src/shared/api/api-instance.ts",

@@ -4,17 +4,18 @@ import { EditInput, useUser } from "~/entities/user";
 import { cn, getApiError, useForm } from "~/shared/lib";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { Alert, Button, Paragraph } from "~/shared/ui";
-import { useUpdateUser } from "~/features/auth";
-import { startTransition } from "react";
-import { UserObjectWithPasswordDto } from "~/shared/api/generated";
+import { useUserUpdate } from "../../model";
 
-type InitialState = UserObjectWithPasswordDto;
+type InitialState = {
+  name: string;
+  email: string;
+  password: string;
+};
 
 export const SettingsForm: React.FC = () => {
   const currentUser = useUser((s) => s.currentUser);
   const content = CONSTANTS_MAP.features.auth.profile;
-  const [update, { data, error, isError, isLoading, isSuccess }] =
-    useUpdateUser();
+  const { mutate, data, error, isLoading, isSuccess } = useUserUpdate();
 
   const initialState: InitialState = {
     name: currentUser?.name ?? "",
@@ -23,18 +24,13 @@ export const SettingsForm: React.FC = () => {
     ...data,
   };
 
-  const fetchFn = (values: UserObjectWithPasswordDto) => update(values);
-
   const { values, handleChange } = useForm(initialState);
   const isDataHasChanges =
     JSON.stringify(initialState) !== JSON.stringify(values);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    startTransition(() => {
-      fetchFn(values);
-    });
+    mutate(values);
   };
 
   return (
@@ -45,7 +41,7 @@ export const SettingsForm: React.FC = () => {
         isLoading && "animate-pulse",
       )}
     >
-      {isError && error && (
+      {error && (
         <Alert
           onButtonClick={undefined}
           variant="error"

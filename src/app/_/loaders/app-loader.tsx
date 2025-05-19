@@ -1,56 +1,58 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { api } from "~/shared/api";
 import { Loader } from "~/shared/ui";
-import { User, UserProvider } from "~/entities/user";
 import { Session, SessionProvider } from "~/entities/session";
-import { IngredientObject, IngredientsProvider } from "~/entities/ingredient";
 import { useApplayAppInterceptor } from "../interceptors/app-interceptor";
+import { useIngredients } from "~/entities/ingredient";
+import { useUser } from "~/entities/user";
+import {
+  ApiError,
+  useGetAuthUser,
+  useGetIngredients,
+} from "~/shared/api/generated";
 
 export function AppLoader({
-  data: { session },
+  data,
   children,
 }: {
   data: { session: Session | undefined };
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [ingredients, setIngredients] = useState<IngredientObject[]>([]);
-  const [isIngredientsLoading, setIsIngredientsLoading] =
-    useState<boolean>(true);
-  const [isUserLoading, setIsUserLoading] = useState<boolean>(true);
+  const setIngredients = useIngredients((s) => s.setIngredients);
+  const setCurrentUser = useUser((s) => s.setCurrentUser);
+  const session = data.session;
 
   useApplayAppInterceptor({ session });
 
-  useEffect(() => {
-    const token = session?.accessToken;
-    if (!token) return setIsUserLoading(false);
-
-    api
-      .getAuthUser({
-        headers: {
-          Authorization: `${token}`,
-        },
-      })
-      .then((res) => {
-        setUser(res.user);
-      })
-      .finally(() => {
-        setIsUserLoading(false);
-      });
-  }, [session]);
-
-  useEffect(() => {
-    api
-      .getIngredients()
-      .then(({ data }) => {
+  const { isLoading: isIngredientsLoading } = useGetIngredients<ApiError>({
+    swr: {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      onSuccess({ data }) {
         setIngredients(data);
-      })
-      .finally(() => {
-        setIsIngredientsLoading(false);
-      });
-  }, []);
+      },
+    },
+    request: {
+      headers: {
+        Authorization: session?.accessToken,
+      },
+    },
+  });
+
+  const { isLoading: isUserLoading } = useGetAuthUser<ApiError>({
+    swr: {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      onSuccess({ user }) {
+        setCurrentUser(user);
+      },
+    },
+    request: {
+      headers: {
+        Authorization: session?.accessToken,
+      },
+    },
+  });
 
   const isDataFetching = isUserLoading || isIngredientsLoading;
 
@@ -58,13 +60,7 @@ export function AppLoader({
     <>
       {isDataFetching && <Loader screen />}
       {!isDataFetching ? (
-        <SessionProvider value={{ session }}>
-          <UserProvider value={{ user }}>
-            <IngredientsProvider value={{ ingredients }}>
-              {children}
-            </IngredientsProvider>
-          </UserProvider>
-        </SessionProvider>
+        <SessionProvider value={{ session }}>{children}</SessionProvider>
       ) : null}
     </>
   );

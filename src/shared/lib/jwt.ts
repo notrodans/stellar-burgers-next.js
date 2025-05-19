@@ -1,9 +1,7 @@
 import { JWTPayload, jwtVerify, SignJWT } from "jose";
 
 export type SecretKey = Parameters<typeof SignJWT.prototype.sign>[0];
-export type Payload<T> = T extends object & JWTPayload
-  ? T
-  : object & JWTPayload;
+export type Payload<T> = T extends object & JWTPayload ? T : JWTPayload;
 
 export async function encrypt<T>(payload: Payload<T>, secret: SecretKey) {
   return new SignJWT(payload)

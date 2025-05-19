@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect } from "react";
-import PortalReactDOM from "react-dom";
 import { cn } from "~/shared/lib/css";
 import { CONSTANTS_MAP, ICONS_MAP } from "~/shared/constants";
 import { ModalProps } from "./types";
+import { createPortal } from "react-dom";
 
 export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
   ({ className, children, onClose, heading, ...props }, ref) => {
-    const modalRoot = document.getElementById("modal");
     const { modalCloseKey } = CONSTANTS_MAP.shared.config;
+
     useEffect(() => {
       function handleKeyDown(event: KeyboardEvent) {
         if (event.key === modalCloseKey) {
@@ -21,8 +21,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       };
     }, [onClose, modalCloseKey]);
 
-    if (!modalRoot) return null;
-    return PortalReactDOM.createPortal(
+    const modal = (
       <div
         className="fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-dark bg-opacity-75 cursor-pointer overflow-hidden"
         onClick={onClose}
@@ -49,9 +48,10 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           </div>
           {children}
         </div>
-      </div>,
-      modalRoot,
+      </div>
     );
+
+    return createPortal(modal, document.getElementById("modals")!);
   },
 );
 

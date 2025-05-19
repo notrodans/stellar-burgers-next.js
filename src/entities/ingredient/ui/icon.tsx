@@ -13,6 +13,9 @@ export const IngredientIcon: React.FC<{
       )}
     >
       <Image
+        width={144}
+        height={72}
+        quality={100}
         src={image}
         className="bg-dark rounded-full object-cover h-[44px] w-[44px] lg:w-[60px] lg:h-[60px]"
         alt="ingredient"

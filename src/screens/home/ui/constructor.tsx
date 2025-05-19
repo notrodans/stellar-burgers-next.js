@@ -3,11 +3,11 @@
 import { MemoizedConstructorElement } from "~/widgets/constructor-card";
 import { useIngredientDrop } from "~/features/constructor-manager";
 import { OrderButton } from "~/features/order";
-import { IngredientPrice, useIngredientsById } from "~/entities/ingredient";
 import { cn } from "~/shared/lib";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { Heading, ScrollArea } from "~/shared/ui";
 import { useConstructor } from "~/entities/constructor";
+import { IngredientPrice, useIngredientsById } from "~/entities/ingredient";
 
 export const ConstructorContainer: React.FC = () => {
   const { onAddBunText, onEmptyText } =

@@ -1,6 +1,6 @@
 import { apiInstance } from "~/shared/api/api-instance";
 import { ROUTER_PATHS } from "~/shared/constants";
-import { useEventCallback } from "~/shared/lib/react";
+import { useEventCallback } from "~/shared/lib";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { api } from "~/shared/api";
@@ -20,12 +20,10 @@ export function useApplayAppInterceptor({
       (response) => {
         return response;
       },
-      (error) => {
+      async (error) => {
         // 403 handler
-        if (
-          error.response.data.message === API_MESSAGES.TOKEN_ERROR &&
-          error.response.status === 403
-        ) {
+        if (error.response.status === 403) {
+          if (error.response.data.message !== API_MESSAGES.TOKEN_ERROR) return;
           let isRetry = false;
           if (!session) return routerReplace(ROUTER_PATHS["403"]);
 
@@ -33,7 +31,7 @@ export function useApplayAppInterceptor({
             const token = session.refreshToken;
             if (!token) throw error;
 
-            api
+            await api
               .postAuthToken(
                 { token },
                 {
@@ -42,10 +40,11 @@ export function useApplayAppInterceptor({
                   },
                 },
               )
-              .then(async (tokens) => {
-                await commitSession({
+              .then(async (res) => {
+                commitSession({
                   ...session,
-                  ...tokens,
+                  accessToken: res.accessToken,
+                  refreshToken: res.refreshToken,
                 });
               })
               .finally(() => {

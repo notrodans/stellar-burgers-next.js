@@ -1,4 +1,3 @@
-import { createStoreContext } from "~/shared/lib/zustand";
 import { create } from "zustand";
 import { nanoid } from "nanoid";
 import { IngredientID } from "~/shared/api/generated";
@@ -9,76 +8,68 @@ type ConstructorStore = {
   bun: string | null;
   setBun: (bunId: string) => void;
   addIngredient: (_id: IngredientID) => void;
-  removeIngredient: (_id: IngredientID, index?: number) => void;
+  removeIngredient: ({
+    _id,
+    index,
+  }: {
+    _id?: IngredientID;
+    index?: number;
+  }) => void;
   moveIngredient: (params: { dragIndex?: number; hoverIndex?: number }) => void;
   clearConstructor: () => void;
 };
 
-export const { useStore: useConstructor, Provider: ConstructorProvider } =
-  createStoreContext(
-    ({
-      ingredients,
-      bun,
-    }: {
-      ingredients: ConstructorStore["ingredients"];
-      bun: ConstructorStore["bun"];
-    }) =>
-      create<ConstructorStore>((set) => ({
-        ingredients,
-        bun,
-        setBun: (bunId: string) => set({ bun: bunId }),
-        addIngredient: (_id: IngredientID) =>
-          set((state) => ({
-            ingredients: [...state.ingredients, { _id, uniqueId: nanoid() }],
-          })),
-        removeIngredient: (_id: IngredientID, index?: number) =>
-          set((state) => {
-            if (index) {
-              return {
-                ingredients: state.ingredients.filter(
-                  (ingredient, ingredientIndex) => index !== ingredientIndex,
-                ),
-              };
-            }
-
-            if (state.bun === _id) {
-              return {
-                bun: null,
-              };
-            }
-
-            const indexToRemove = state.ingredients.findIndex(
-              (ingredient) => ingredient._id === _id,
-            );
-
-            if (indexToRemove !== -1) {
-              return {
-                ingredients: state.ingredients.filter(
-                  (ingredient, index) => indexToRemove !== index,
-                ),
-              };
-            }
-
-            return {};
-          }),
-
-        moveIngredient: ({ dragIndex, hoverIndex }) => {
-          if (dragIndex === undefined || hoverIndex === undefined) return;
-          set((state) => {
-            const [movedItem] = state.ingredients.splice(dragIndex, 1);
-            return {
-              ingredients: [...state.ingredients].splice(
-                hoverIndex,
-                0,
-                movedItem,
-              ),
-            };
-          });
+export const useConstructor = create<ConstructorStore>((set) => ({
+  ingredients: [],
+  bun: null,
+  setBun: (bunId) => set({ bun: bunId }),
+  addIngredient: (_id) => {
+    set((state) => ({
+      ingredients: [
+        ...state.ingredients,
+        {
+          _id,
+          uniqueId: nanoid(),
         },
-        clearConstructor: () =>
-          set({
-            bun: null,
-            ingredients: [],
-          }),
-      })),
-  );
+      ],
+    }));
+  },
+  removeIngredient: ({ index, _id }) => {
+    set((state) => {
+      if (index !== undefined) {
+        const newIngredients = [...state.ingredients];
+        newIngredients.splice(index, 1);
+        return { ingredients: newIngredients };
+      }
+
+      if (_id !== undefined) {
+        const indexToRemove = state.ingredients.findIndex(
+          (ingredient) => ingredient._id === _id,
+        );
+
+        if (indexToRemove !== -1) {
+          const newIngredients = [...state.ingredients];
+          newIngredients.splice(indexToRemove, 1);
+
+          const shouldClearBun = state.bun === _id;
+          return {
+            ingredients: newIngredients,
+            bun: shouldClearBun ? null : state.bun,
+          };
+        }
+      }
+
+      return state;
+    });
+  },
+  moveIngredient: ({ dragIndex, hoverIndex }) => {
+    if (dragIndex === undefined || hoverIndex === undefined) return;
+    set((state) => {
+      const newIngredients = [...state.ingredients];
+      const [movedItem] = newIngredients.splice(dragIndex, 1);
+      newIngredients.splice(hoverIndex, 0, movedItem);
+      return { ingredients: newIngredients };
+    });
+  },
+  clearConstructor: () => set({ bun: null, ingredients: [] }),
+}));

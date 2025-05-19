@@ -1,7 +1,7 @@
 export const ROUTER_PATHS = {
   HOME: "/",
   FEED: "/feed",
-  FEED_ORDER_BY_ID: "/feed/:id",
+  ORDER_BY_ID: "/order/",
   INGREDIENTS: "/ingredients",
   INGREDIENT_BY_ID: "/ingredients/:id",
   PROFILE: "/profile",

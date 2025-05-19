@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Iceland } from "next/font/google";
+import { Iceland, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AppLoader } from "./_/loaders/app-loader";
 import { loadAppLoaderData } from "./_/loaders/load-app-loader-data";
 import { RootLayout } from "./_/layouts/root-layout";
 import { AppProvider } from "./_/providers/app-provider";
+import { SWRConfig } from "swr";
 
 const icelandFont = Iceland({
   weight: "400",
@@ -34,13 +35,16 @@ export default async function Layout({
     <html lang="en">
       <GetHead />
       <body
-        className={`${jetBrainsMonoFont.className} ${icelandFont.className} antialiased`}
+        className={`${icelandFont.variable} ${jetBrainsMonoFont.variable} antialiased`}
       >
-        <AppLoader data={{ session }}>
-          <AppProvider>
-            <RootLayout>{children}</RootLayout>
-          </AppProvider>
-        </AppLoader>
+        <SWRConfig>
+          <AppLoader data={{ session }}>
+            <AppProvider>
+              <RootLayout>{children}</RootLayout>
+            </AppProvider>
+          </AppLoader>
+        </SWRConfig>
+        <div id="modals" />
       </body>
     </html>
   );
@@ -66,7 +70,6 @@ const GetHead = () => {
         sizes="16x16"
         href="/favs/favicon-16x16.png"
       />
-      <link rel="manifest" href="/favs/site.webmanifest" />
       <link
         rel="mask-icon"
         href="/favs/safari-pinned-tab.svg"

@@ -1,3 +1,3 @@
-export default function FeedPage() {
-  return <div>feed</div>;
-}
+import { FeedPage } from "~/screens/feed";
+
+export default FeedPage;

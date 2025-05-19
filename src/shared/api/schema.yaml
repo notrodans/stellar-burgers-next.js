@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   version: 1.0.0
-  title: Full API - Users, Sessions and Burgers))
-  # description: API for managing 
+  title: Full API - Users, Sessions and Burgers
+  description: API for managing ingredients, orders and user authentication
 
 servers:
   - url: /api
@@ -31,6 +31,7 @@ paths:
                 required:
                   - success
                   - data
+
   /auth/user:
     get:
       tags: [User]
@@ -43,9 +44,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  success:
+                    type: boolean
+                    example: true
                   user:
-                    $ref: '#/components/schemas/UserObjectDto'
-                required: [user]
+                    $ref: '#/components/schemas/UserObject'
+                required: [success, user]
     patch:
       tags: [User]
       summary: Update user data
@@ -61,11 +65,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  user:
-                    $ref: '#/components/schemas/UserObjectDto'
-                required: [user]
+                $ref: '#/components/schemas/UserWithTokens'
 
   /auth/login:
     post:
@@ -83,7 +83,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserWithTokensDto'
+                allOf:
+                  - $ref: '#/components/schemas/UserWithTokens'
+                  - type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: true
+                required: [success]
 
   /auth/register:
     post:
@@ -101,7 +108,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserWithTokensDto'
+                allOf:
+                  - $ref: '#/components/schemas/UserWithTokens'
+                  - type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: true
+                required: [success]
 
   /auth/logout:
     post:
@@ -125,9 +139,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  success:
+                    type: boolean
+                    example: true
                   message:
                     type: string
-                required: [message]
+                required: [success, message]
 
   /auth/token:
     post:
@@ -147,7 +164,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenObjectDto'
+                allOf:
+                  - $ref: '#/components/schemas/TokenObjectDto'
+                  - type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: true
+                required: [success]
         '403':
           description: Invalid or expired refresh token
           content:
@@ -178,9 +202,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  success:
+                    type: boolean
+                    example: true
                   message:
                     type: string
-                required: [message]
+                required: [success, message]
 
   /password-reset/reset:
     post:
@@ -200,9 +227,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  success:
+                    type: boolean
+                    example: true
                   message:
                     type: string
-                required: [message]
+                required: [success, message]
 
   /orders:
     post:
@@ -227,7 +257,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderObjectDto'
+                allOf:
+                  - $ref: '#/components/schemas/OrderObject'
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        example: "Space флюоресцентный бургер"
+                      success:
+                        type: boolean
+                        example: true
+                    required: [success, order]
 
   /orders/{id}:
     get:
@@ -247,11 +287,14 @@ paths:
               schema:
                 type: object
                 properties:
+                  success:
+                    type: boolean
+                    example: true
                   orders:
                     type: array
                     items:
-                      $ref: '#/components/schemas/DetailedOrderObjectDto'
-                required: [orders]
+                      $ref: '#/components/schemas/DetailedOrderObject'
+                required: [success, orders]
 
 components:
   schemas:
@@ -304,7 +347,7 @@ components:
           example: "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6"
       required: [_id, name, type, proteins, fat, carbohydrates, calories, price, image, image_mobile, image_large, __v]
 
-    UserObjectDto:
+    UserObject:
       type: object
       properties:
         email:
@@ -327,7 +370,7 @@ components:
 
     UserObjectWithPasswordDto:
       allOf:
-        - $ref: '#/components/schemas/UserObjectDto'
+        - $ref: '#/components/schemas/UserObject'
         - type: object
           properties:
             password:
@@ -348,11 +391,14 @@ components:
     TokenObjectDto:
       type: object
       properties:
+        success:
+          type: boolean
+          example: true
         accessToken:
           type: string
         refreshToken:
           type: string
-      required: [accessToken, refreshToken]
+      required: [success, accessToken, refreshToken]
 
     RefreshTokenRequest:
       type: object
@@ -363,16 +409,16 @@ components:
       required:
         - token
 
-    UserWithTokensDto:
+    UserWithTokens:
       allOf:
         - $ref: '#/components/schemas/TokenObjectDto'
         - type: object
           properties:
             user:
-              $ref: '#/components/schemas/UserObjectDto'
+              $ref: '#/components/schemas/UserObject'
           required: [user]
 
-    OrderObjectDto:
+    OrderObject:
       type: object
       properties:
         name:
@@ -385,9 +431,10 @@ components:
               type: number
               example: 12345
           required: [number]
+
       required: [name, order]
 
-    DetailedOrderObjectDto:
+    DetailedOrderObject:
       type: object
       properties:
         ingredients:
@@ -425,29 +472,14 @@ components:
         - createdAt
         - updatedAt
 
-    OrderID:
-      type: string
-      description: Unique identifier for order
-      example: "611a9a9b9b9b9b9b9b9b9b9b"
-
-    Timestamp:
-      type: string
-      format: date-time
-      description: ISO 8601 timestamp
-      example: "2021-08-15T12:00:00.000Z"
-
-    IngredientID:
-      type: string
-      description: Reference to ingredient
-      example: "60d3b41abdacab0026a733c6"
-
     ApiError:
       type: object
       description: Error response
       properties:
         success:
           type: boolean
+          example: false
         message:
           type: string
-      required: [message, status]
-
+          example: "Error description"
+      required: [success, message]

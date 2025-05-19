@@ -4,7 +4,7 @@ import { createCookieSessionStorage } from "~/shared/lib/session";
 import { Session } from "./types";
 import { revalidatePath } from "next/cache";
 
-const sessionStorage = await createCookieSessionStorage<Session>({
+const sessionStorage = await createCookieSessionStorage<Session | undefined>({
   name: "__session",
   httpOnly: true,
   maxAge: 60 * 60 * 24 * 7,
