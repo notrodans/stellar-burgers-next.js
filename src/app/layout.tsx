@@ -6,6 +6,7 @@ import { loadAppLoaderData } from "./_/loaders/load-app-loader-data";
 import { RootLayout } from "./_/layouts/root-layout";
 import { AppProvider } from "./_/providers/app-provider";
 import { SWRConfig } from "swr";
+import { SWRProvider } from "./_/providers/swr-provider";
 
 const icelandFont = Iceland({
   weight: "400",
@@ -37,13 +38,13 @@ export default async function Layout({
       <body
         className={`${icelandFont.variable} ${jetBrainsMonoFont.variable} antialiased`}
       >
-        <SWRConfig>
+        <SWRProvider>
           <AppLoader data={{ session }}>
             <AppProvider>
               <RootLayout>{children}</RootLayout>
             </AppProvider>
           </AppLoader>
-        </SWRConfig>
+        </SWRProvider>
         <div id="modals" />
       </body>
     </html>

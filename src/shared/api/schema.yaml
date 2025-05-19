@@ -59,13 +59,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UserObjectWithPasswordDto'
+
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserWithTokens'
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  user:
+                    $ref: '#/components/schemas/UserObject'
+                required: [success, user]
 
   /auth/login:
     post:
@@ -235,6 +243,37 @@ paths:
                 required: [success, message]
 
   /orders:
+    get:
+      tags: [Orders]
+      summary: Get user orders
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DetailedOrderObject'
+                  total: 
+                    type: number
+                  totalToday: 
+                    type: number
+                required: [success, orders, total, totalToday]
+
+        '401':
+          description: You should be authorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
     post:
       tags: [Orders]
       summary: Create new order
@@ -268,6 +307,31 @@ paths:
                         type: boolean
                         example: true
                     required: [success, order]
+
+  /orders/all:
+    get:
+      tags: [Orders]
+      summary: Get all orders
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DetailedOrderObject'
+                  total:
+                    type: number
+                  totalToday:
+                    type: number
+                required: [success, orders, total, totalToday]
 
   /orders/{id}:
     get:

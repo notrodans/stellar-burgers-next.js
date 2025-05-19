@@ -5,5 +5,4 @@ export * from "./react";
 export * from "./session";
 export * from "./utils";
 export * from "./zustand";
-export * from "./websocket";
 export * from "./location";

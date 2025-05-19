@@ -12,19 +12,19 @@ export const FeedPage: React.FC = () => {
   const content = CONSTANTS_MAP.pages.feed;
   const [currentTab, setCurrentTab] = useState("mainTab");
 
-  const { data, status } = useGetStreamingOrders();
+  const { data, isLoading, isSuccess, error } = useGetStreamingOrders();
 
-  if (status === "connecting") {
+  if (isLoading) {
     return (
       <Loader text={content.orders.loadingText} className="pt-2 lg:pt-10" />
     );
   }
 
-  if (status === "error") {
+  if (error) {
     return <Paragraph size="large">{content.orders.errorText}</Paragraph>;
   }
 
-  if (data && status === "connected" && data.success) {
+  if (data && isSuccess) {
     return (
       <>
         <Heading className="text-center lg:text-left mb-6">

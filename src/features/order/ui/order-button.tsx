@@ -21,13 +21,14 @@ export const OrderButton: React.FC = () => {
   const clearConstructor = useConstructor((s) => s.clearConstructor);
 
   const { isOrderable, ingredientIds } = useOrderDetails();
-  const { trigger: mutate, data, isLoading, error } = useCreateOrder();
+  const { mutate: order, data, isLoading, error } = useCreateOrder();
 
   const router = useRouter();
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    mutate({ ingredients: ingredientIds }).then(() => setShowModal(true));
+    console.log(ingredientIds);
+    await order({ ingredients: ingredientIds }).then(() => setShowModal(true));
   };
 
   return (

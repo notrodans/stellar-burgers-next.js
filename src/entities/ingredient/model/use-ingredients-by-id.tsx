@@ -11,7 +11,7 @@ export const useIngredientsById = ({
 
   const ingredients = ids
     .map((item) => {
-      const id = typeof item === "string" ? item : item._id;
+      const id = typeof item === "string" ? item : item?._id;
       const ingredient = data.find((dataItem) => dataItem._id === id);
       if (typeof item !== "string" && ingredient) {
         return {

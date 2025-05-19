@@ -1,20 +1,13 @@
 import { create } from "zustand";
 import { nanoid } from "nanoid";
-import { IngredientID } from "~/shared/api/generated";
 import { Ingredient } from "./types";
 
 type ConstructorStore = {
   ingredients: Array<Ingredient>;
   bun: string | null;
   setBun: (bunId: string) => void;
-  addIngredient: (_id: IngredientID) => void;
-  removeIngredient: ({
-    _id,
-    index,
-  }: {
-    _id?: IngredientID;
-    index?: number;
-  }) => void;
+  addIngredient: (_id: string) => void;
+  removeIngredient: ({ _id, index }: { _id?: string; index?: number }) => void;
   moveIngredient: (params: { dragIndex?: number; hoverIndex?: number }) => void;
   clearConstructor: () => void;
 };

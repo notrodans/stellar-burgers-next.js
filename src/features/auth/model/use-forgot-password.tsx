@@ -10,14 +10,14 @@ export function useForgotPassword() {
   const { currentSession } = useSession();
 
   const { trigger, data, error, isMutating } = usePostPasswordReset<ApiError>({
-    request: {
-      headers: {
-        Authorization: currentSession!.accessToken,
-      },
-    },
     swr: {
       onSuccess() {
         router.replace(ROUTER_PATHS.RESET_PASSWORD);
+      },
+    },
+    request: {
+      headers: {
+        Authorization: currentSession!.accessToken,
       },
     },
   });

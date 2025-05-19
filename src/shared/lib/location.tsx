@@ -48,7 +48,6 @@ function LoadingIndicator({ state }: { state: LocationState }) {
 
   useEffect(() => {
     if (pending) {
-      console.log("itls pending!!");
       startTransition(() => {
         setState(state);
       });

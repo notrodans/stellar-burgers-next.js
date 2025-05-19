@@ -1,11 +1,17 @@
-import { API_ENTRYPOINTS, CONSTANTS_MAP } from "~/shared/constants";
-import { OrderList } from "./types";
-import { useWebSocket } from "~/shared/lib";
+import useSWRSubscription from "swr/subscription";
 
 export function useGetStreamingOrders() {
-  const socket = useWebSocket<OrderList>(
-    CONSTANTS_MAP.shared.config.wsUrl + API_ENTRYPOINTS.GET_STREAMING_ORDERS,
+  const { data, error } = useSWRSubscription(
+    "wss://norma.nomoreparties.space/orders/all",
+    (key, { next }) => {
+      const socket = new WebSocket(key);
+      socket.addEventListener("message", (event) =>
+        next(null, JSON.parse(event.data)),
+      );
+      socket.addEventListener("error", (event) => next(event.error));
+      return () => socket.close();
+    },
   );
 
-  return { ...socket };
+  return { data, isLoading: !data && !error, isSuccess: data && !error, error };
 }

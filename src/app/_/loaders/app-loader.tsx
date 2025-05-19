@@ -22,12 +22,8 @@ export function AppLoader({
   const setCurrentUser = useUser((s) => s.setCurrentUser);
   const session = data.session;
 
-  useApplayAppInterceptor({ session });
-
   const { isLoading: isIngredientsLoading } = useGetIngredients<ApiError>({
     swr: {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
       onSuccess({ data }) {
         setIngredients(data);
       },
@@ -41,8 +37,6 @@ export function AppLoader({
 
   const { isLoading: isUserLoading } = useGetAuthUser<ApiError>({
     swr: {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
       onSuccess({ user }) {
         setCurrentUser(user);
       },
@@ -53,6 +47,8 @@ export function AppLoader({
       },
     },
   });
+
+  useApplayAppInterceptor({ session });
 
   const isDataFetching = isUserLoading || isIngredientsLoading;
 

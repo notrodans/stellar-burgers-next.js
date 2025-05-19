@@ -1,10 +1,12 @@
 import React from "react";
 import type { ConnectDragSource } from "react-dnd";
-import { IngredientID, IngredientObjectDto } from "~/shared/api/generated";
+import { IngredientObjectDto } from "~/shared/api/generated";
 
 export type IngredientObject = IngredientObjectDto;
 
 export type IngredientType = "bun" | "sauce" | "main";
+
+type IngredientID = string;
 
 export interface IngredientPriceProps {
   value: number;

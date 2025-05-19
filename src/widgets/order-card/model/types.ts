@@ -1,6 +1,9 @@
-import { DetailedOrderObjectDto } from "~/shared/api/generated";
+import { DetailedOrderObject } from "~/shared/api/generated";
 
-export type OrderCardProps = Pick<
-  DetailedOrderObjectDto,
-  "name" | "number" | "status" | "createdAt" | "ingredients"
->;
+export type OrderCardProps = {
+  name: string;
+  status: "done" | "pending" | "created";
+  number: number;
+  createdAt: string;
+  ingredients: DetailedOrderObject["ingredients"];
+};
