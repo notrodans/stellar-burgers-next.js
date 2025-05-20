@@ -3,7 +3,7 @@
 import { cn, getApiError, useForm } from "~/shared/lib";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { Input, Button, Alert } from "~/shared/ui";
-import { useForgotPassword } from "../../model/use-forgot-password";
+import { useForgotPassword } from "../../model";
 
 const initialData = {
   email: "",

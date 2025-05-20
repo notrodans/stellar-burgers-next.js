@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   version: 1.0.0
-  title: Full API - Users, Sessions and Burgers
-  description: API for managing ingredients, orders and user authentication
+  title: Public API - Authentication and Ingredients
+  description: API endpoints that don't require authentication
 
 servers:
   - url: /api
@@ -10,8 +10,7 @@ servers:
 paths:
   /ingredients:
     get:
-      tags:
-        - Ingredients
+      tags: [Ingredients]
       summary: Get list of all available ingredients
       responses:
         '200':
@@ -27,53 +26,8 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/IngredientObjectDto'
-                required:
-                  - success
-                  - data
-
-  /auth/user:
-    get:
-      tags: [User]
-      summary: Get current user data
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  user:
-                    $ref: '#/components/schemas/UserObject'
-                required: [success, user]
-    patch:
-      tags: [User]
-      summary: Update user data
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserObjectWithPasswordDto'
-
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  user:
-                    $ref: '#/components/schemas/UserObject'
-                required: [success, user]
+                      $ref: '#/components/schemas/IngredientObject'
+                required: [success, data]
 
   /auth/login:
     post:
@@ -124,11 +78,38 @@ paths:
                         type: boolean
                         example: true
                 required: [success]
+  
+  /auth/token:
+    post:
+      tags: [Auth]
+      summary: Refresh access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: Tokens refreshed successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/TokenObjectDto'
+                  - type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: true
+                required: [success]
 
   /auth/logout:
     post:
       tags: [Auth]
       summary: User logout
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -154,38 +135,6 @@ paths:
                     type: string
                 required: [success, message]
 
-  /auth/token:
-    post:
-      tags:
-        - Auth
-      summary: Refresh access token
-      description: Exchange refresh token for new access token
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RefreshTokenRequest'
-      responses:
-        '200':
-          description: Tokens refreshed successfully
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/TokenObjectDto'
-                  - type: object
-                    properties:
-                      success:
-                        type: boolean
-                        example: true
-                required: [success]
-        '403':
-          description: Invalid or expired refresh token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
 
   /password-reset:
     post:
@@ -242,76 +191,10 @@ paths:
                     type: string
                 required: [success, message]
 
-  /orders:
-    get:
-      tags: [Orders]
-      summary: Get user orders
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  orders:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/DetailedOrderObject'
-                  total: 
-                    type: number
-                  totalToday: 
-                    type: number
-                required: [success, orders, total, totalToday]
-
-        '401':
-          description: You should be authorised
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-
-    post:
-      tags: [Orders]
-      summary: Create new order
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                ingredients:
-                  type: array
-                  items:
-                    type: string
-                    example: "60d3b41abdacab0026a733c6"
-              required: [ingredients]
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/OrderObject'
-                  - type: object
-                    properties:
-                      name:
-                        type: string
-                        example: "Space флюоресцентный бургер"
-                      success:
-                        type: boolean
-                        example: true
-                    required: [success, order]
-
   /orders/all:
     get:
       tags: [Orders]
-      summary: Get all orders
+      summary: Get all orders (public feed)
       responses:
         '200':
           description: Successful operation
@@ -337,6 +220,8 @@ paths:
     get:
       tags: [Orders]
       summary: Get order details by ID
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -367,7 +252,7 @@ components:
       enum: [bun, sauce, main]
       description: Type of the ingredient
     
-    IngredientObjectDto:
+    IngredientObject:
       type: object
       properties:
         _id:
@@ -463,7 +348,7 @@ components:
         refreshToken:
           type: string
       required: [success, accessToken, refreshToken]
-
+    
     RefreshTokenRequest:
       type: object
       properties:
@@ -481,22 +366,6 @@ components:
             user:
               $ref: '#/components/schemas/UserObject'
           required: [user]
-
-    OrderObject:
-      type: object
-      properties:
-        name:
-          type: string
-          example: "Space флюоресцентный бургер"
-        order:
-          type: object
-          properties:
-            number:
-              type: number
-              example: 12345
-          required: [number]
-
-      required: [name, order]
 
     DetailedOrderObject:
       type: object
@@ -535,15 +404,3 @@ components:
         - number
         - createdAt
         - updatedAt
-
-    ApiError:
-      type: object
-      description: Error response
-      properties:
-        success:
-          type: boolean
-          example: false
-        message:
-          type: string
-          example: "Error description"
-      required: [success, message]

@@ -27,7 +27,6 @@ export const OrderButton: React.FC = () => {
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(ingredientIds);
     await order({ ingredients: ingredientIds }).then(() => setShowModal(true));
   };
 
@@ -35,7 +34,7 @@ export const OrderButton: React.FC = () => {
     <>
       <Button
         onClick={
-          currentUser ? handleClick : () => router.push(ROUTER_PATHS.SIGN_IN)
+          currentUser ? handleClick : () => router.replace(ROUTER_PATHS.SIGN_IN)
         }
         disabled={!isOrderable || isLoading}
         className={cn(isLoading && "animate-pulse")}

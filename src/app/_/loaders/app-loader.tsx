@@ -5,11 +5,9 @@ import { Session, SessionProvider } from "~/entities/session";
 import { useApplayAppInterceptor } from "../interceptors/app-interceptor";
 import { useIngredients } from "~/entities/ingredient";
 import { useUser } from "~/entities/user";
-import {
-  ApiError,
-  useGetAuthUser,
-  useGetIngredients,
-} from "~/shared/api/generated";
+import { useGetIngredients } from "~/shared/api/public-generated";
+import { useGetAuthUser } from "~/shared/api/private-generated";
+import { ApiError } from "~/shared/api";
 
 export function AppLoader({
   data,
@@ -22,15 +20,12 @@ export function AppLoader({
   const setCurrentUser = useUser((s) => s.setCurrentUser);
   const session = data.session;
 
+  useApplayAppInterceptor({ session });
+
   const { isLoading: isIngredientsLoading } = useGetIngredients<ApiError>({
     swr: {
       onSuccess({ data }) {
         setIngredients(data);
-      },
-    },
-    request: {
-      headers: {
-        Authorization: session?.accessToken,
       },
     },
   });
@@ -41,14 +36,7 @@ export function AppLoader({
         setCurrentUser(user);
       },
     },
-    request: {
-      headers: {
-        Authorization: session?.accessToken,
-      },
-    },
   });
-
-  useApplayAppInterceptor({ session });
 
   const isDataFetching = isUserLoading || isIngredientsLoading;
 

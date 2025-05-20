@@ -12,13 +12,13 @@ export function AuthLoader({ children }: { children: React.ReactNode }) {
   const session = useSession((s) => s.currentSession);
 
   const router = useRouter();
-  const routerPush = useEventCallback(router.push);
+  // const routerPush = useEventCallback(router.push);
 
   useEffect(() => {
     if (!session) return setIsLoading(false);
 
-    routerPush(ROUTER_PATHS.HOME);
-  }, [session, routerPush]);
+    window.location.href = ROUTER_PATHS.HOME;
+  }, [session]);
 
   return <>{isLoading ? <Loader screen /> : children}</>;
 }

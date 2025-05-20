@@ -1,11 +1,17 @@
-import { apiInstance } from "~/shared/api/api-instance";
+"use client";
+
+import {
+  publicApiInstance,
+  privateApiInstance,
+} from "~/shared/api/api-instance";
 import { ROUTER_PATHS } from "~/shared/constants";
-import { useEventCallback } from "~/shared/lib";
+import { decode, useEventCallback } from "~/shared/lib";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { api } from "~/shared/api";
 import { commitSession, Session } from "~/entities/session";
-import { API_MESSAGES } from "~/shared/constants";
+import { postAuthToken } from "~/shared/api/public-generated";
+import { useIsomorphicLayoutEffect } from "swr/_internal";
+
+let refreshPromise: Promise<{ accessToken: string } | void> | null = null;
 
 export function useApplayAppInterceptor({
   session,
@@ -13,58 +19,51 @@ export function useApplayAppInterceptor({
   session: Session | undefined;
 }) {
   const router = useRouter();
-
   const routerReplace = useEventCallback(router.replace);
-  useEffect(() => {
-    apiInstance.interceptors.response.use(
-      (response) => {
-        return response;
-      },
-      async (error) => {
-        // 403 handler
-        if (error.response.status === 403) {
-          if (error.response.data.message !== API_MESSAGES.TOKEN_ERROR) return;
-          let isRetry = false;
-          if (!session) return routerReplace(ROUTER_PATHS["403"]);
 
-          if (!isRetry) {
-            const token = session.refreshToken;
-            if (!token) throw error;
-
-            await api
-              .postAuthToken(
-                { token },
-                {
-                  headers: {
-                    Authorization: session.accessToken,
-                  },
-                },
-              )
-              .then(async (res) => {
-                commitSession({
-                  ...session,
-                  accessToken: res.accessToken,
-                  refreshToken: res.refreshToken,
-                });
-              })
-              .finally(() => {
-                isRetry = true;
-              });
-          }
-        }
-      },
-    );
-
-    apiInstance.interceptors.response.use(
+  useIsomorphicLayoutEffect(() => {
+    publicApiInstance.interceptors.response.use(
       (response) => {
         return response;
       },
       (error) => {
-        // 401 handler
-        if (error.response.status === 401) {
+        if (error.response.status === 403) {
           routerReplace(ROUTER_PATHS.SIGN_IN);
         }
       },
     );
+
+    privateApiInstance.interceptors.request.use(async (request) => {
+      if (!session) return request;
+
+      const accessToken = session.accessToken;
+      const refreshToken = session.refreshToken;
+      request.headers.Authorization = accessToken;
+      const decodedAccessToken = decode(session.accessToken);
+      const tokenExpiresAt = decodedAccessToken.exp!;
+
+      if (tokenExpiresAt < Date.now() / 1000 + 10) {
+        if (!refreshPromise) {
+          refreshPromise = postAuthToken({ token: refreshToken })
+            .then(async (res) => {
+              const { accessToken, refreshToken } = res;
+              await commitSession({
+                ...session,
+                accessToken,
+                refreshToken,
+              });
+              return { accessToken };
+            })
+            .finally(async () => {
+              return await Promise.resolve(() => (refreshPromise = null));
+            });
+        }
+
+        const response = await refreshPromise;
+        request.headers.Authorization = response?.accessToken;
+      }
+
+      return request;
+    });
   }, [routerReplace, session]);
 }

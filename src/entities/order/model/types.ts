@@ -1,4 +1,4 @@
-import { DetailedOrderObjectStatus } from "~/shared/api/generated";
+import { DetailedOrderObjectStatus } from "~/shared/api/public-generated";
 
 type OrderObject = {
   name: string;

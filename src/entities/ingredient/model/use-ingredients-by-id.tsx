@@ -1,4 +1,4 @@
-import { IngredientObjectDto } from "~/shared/api/generated";
+import { IngredientObject } from "~/shared/api/public-generated";
 import type { UseIngredientsOptions } from "../model/types";
 import { useIngredients } from "./ingredients.store";
 
@@ -21,7 +21,7 @@ export const useIngredientsById = ({
       }
       return ingredient;
     })
-    .filter(Boolean) as Array<IngredientObjectDto>;
+    .filter(Boolean) as Array<IngredientObject>;
 
   const totalPrice = ingredients.reduce((acc, ingredient) => {
     return acc + ingredient.price;

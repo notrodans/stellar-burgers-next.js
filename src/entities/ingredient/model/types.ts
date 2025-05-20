@@ -1,8 +1,6 @@
 import React from "react";
 import type { ConnectDragSource } from "react-dnd";
-import { IngredientObjectDto } from "~/shared/api/generated";
-
-export type IngredientObject = IngredientObjectDto;
+import { IngredientObject } from "~/shared/api/public-generated";
 
 export type IngredientType = "bun" | "sauce" | "main";
 

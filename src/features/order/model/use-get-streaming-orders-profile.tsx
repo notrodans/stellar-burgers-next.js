@@ -1,5 +1,6 @@
 import { useSession } from "~/entities/session";
-import { ApiError, useGetOrders } from "~/shared/api/generated";
+import { ApiError } from "~/shared/api";
+import { useGetOrders } from "~/shared/api/private-generated";
 
 export function useGetStreamingOrdersProfile() {
   const { currentSession } = useSession();

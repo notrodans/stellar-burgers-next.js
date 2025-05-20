@@ -4,10 +4,9 @@ import { PasswordInput } from "~/entities/user";
 import { cn, getApiError, useForm } from "~/shared/lib";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { Input, Button, Alert } from "~/shared/ui";
-import { UserObjectWithPasswordDto } from "~/shared/api/generated";
 import { useUserRegister } from "../../model";
 
-const initialData: UserObjectWithPasswordDto = {
+const initialData = {
   email: "",
   name: "",
   password: "",

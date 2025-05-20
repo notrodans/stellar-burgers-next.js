@@ -1,4 +1,5 @@
-import { ApiError, useGetOrdersId } from "~/shared/api/generated";
+import { ApiError } from "~/shared/api";
+import { useGetOrdersId } from "~/shared/api/public-generated";
 
 export function useOrderGetById(id: string) {
   const { data, error, isLoading } = useGetOrdersId<ApiError>(id);

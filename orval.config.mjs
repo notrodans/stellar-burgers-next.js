@@ -1,14 +1,28 @@
 const orvalConfig = {
-  main: {
-    input: "./src/shared/api/schema.yaml",
+  public: {
+    input: "./src/shared/api/schemas/public.yaml",
     output: {
-      target: "./src/shared/api/generated.ts",
+      target: "./src/shared/api/public-generated.ts",
       prettier: true,
       client: "swr",
       override: {
         mutator: {
           path: "./src/shared/api/api-instance.ts",
-          name: "createInstance",
+          name: "createInstancePublic",
+        },
+      },
+    },
+  },
+  private: {
+    input: "./src/shared/api/schemas/private.yaml",
+    output: {
+      target: "./src/shared/api/private-generated.ts",
+      prettier: true,
+      client: "swr",
+      override: {
+        mutator: {
+          path: "./src/shared/api/api-instance.ts",
+          name: "createInstancePrivate",
         },
       },
     },

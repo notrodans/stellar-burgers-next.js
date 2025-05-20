@@ -1,5 +1,7 @@
 import { useSession } from "~/entities/session";
-import { ApiError, usePostAuthRegister } from "~/shared/api/generated";
+import { ApiError } from "~/shared/api";
+import { usePostAuthRegister } from "~/shared/api/public-generated";
+import { ROUTER_PATHS } from "~/shared/constants";
 
 export function useUserRegister() {
   const { setCurrentSession } = useSession();

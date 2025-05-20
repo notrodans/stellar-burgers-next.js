@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { isClient } from "../lib/next";
 
-export const apiInstance = axios.create({
+export const publicApiInstance = axios.create({
   baseURL: isClient() ? "/api" : process.env.BASE_API_URL + "/api",
   withCredentials: true,
   headers: {
@@ -9,11 +9,29 @@ export const apiInstance = axios.create({
   },
 });
 
-export const createInstance = async <T>(
+export const privateApiInstance = axios.create({
+  baseURL: isClient() ? "/api" : process.env.BASE_API_URL + "/api",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export const createInstancePublic = async <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig,
 ): Promise<T> => {
-  return apiInstance({
+  return publicApiInstance({
+    ...config,
+    ...options,
+  }).then((r) => r.data);
+};
+
+export const createInstancePrivate = async <T>(
+  config: AxiosRequestConfig,
+  options?: AxiosRequestConfig,
+): Promise<T> => {
+  return privateApiInstance({
     ...config,
     ...options,
   }).then((r) => r.data);

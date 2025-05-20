@@ -1,4 +1,4 @@
-import { DetailedOrderObject } from "~/shared/api/generated";
+import { DetailedOrderObject } from "~/shared/api/public-generated";
 
 export type IngredientsIds = string[];
 

@@ -1,22 +1,18 @@
 import { useSession } from "~/entities/session";
-import { ApiError, usePatchAuthUser } from "~/shared/api/generated";
+import { ApiError } from "~/shared/api";
+import { usePatchAuthUser } from "~/shared/api/private-generated";
 
 export function useUserUpdate() {
   const { currentSession, setCurrentSession } = useSession();
 
   const { trigger, data, error, isMutating } = usePatchAuthUser<ApiError>({
     swr: {
-      onSuccess(res) {
+      async onSuccess(res) {
         if (!currentSession) return;
-        setCurrentSession({
+        await setCurrentSession({
           ...currentSession,
           ...res.user,
         });
-      },
-    },
-    request: {
-      headers: {
-        Authorization: currentSession?.accessToken,
       },
     },
   });

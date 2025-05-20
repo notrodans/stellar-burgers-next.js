@@ -6,13 +6,10 @@ import { CONSTANTS_MAP } from "~/shared/constants";
 import { Input, Button, Alert } from "~/shared/ui";
 import { getApiError } from "~/shared/lib/utils";
 import { useState } from "react";
-import { LoginFormDataDto } from "~/shared/api/generated";
 import { useUserSignIn } from "../../model/use-user-sign-in";
 import { useForm } from "~/shared/lib";
 
-type InitialState = LoginFormDataDto;
-
-const initialState: InitialState = {
+const initialState = {
   email: "",
   password: "",
 };
@@ -20,13 +17,13 @@ const initialState: InitialState = {
 export const LoginForm: React.FC = () => {
   const { loginButton, errorHeadingText } = CONSTANTS_MAP.features.auth.login;
   const [isAlertHide, setIsAlertHide] = useState<boolean>(false);
-  const { mutate, error, isLoading } = useUserSignIn();
+  const { mutate: signin, error, isLoading } = useUserSignIn();
 
   const { values, handleChange } = useForm(initialState);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutate(values);
+    signin(values);
   };
 
   return (

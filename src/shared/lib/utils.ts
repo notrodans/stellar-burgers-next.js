@@ -1,4 +1,4 @@
-import { ApiError } from "../api/generated";
+import { ApiError } from "../api";
 import { CONSTANTS_MAP } from "../constants";
 
 export const getApiError = (error: ApiError) => {

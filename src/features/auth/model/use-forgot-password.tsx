@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useSession } from "~/entities/session";
-import { ApiError, usePostPasswordReset } from "~/shared/api/generated";
+import { ApiError } from "~/shared/api";
+import { usePostPasswordReset } from "~/shared/api/public-generated";
 import { ROUTER_PATHS } from "~/shared/constants";
 
 export function useForgotPassword() {
@@ -13,11 +14,6 @@ export function useForgotPassword() {
     swr: {
       onSuccess() {
         router.replace(ROUTER_PATHS.RESET_PASSWORD);
-      },
-    },
-    request: {
-      headers: {
-        Authorization: currentSession!.accessToken,
       },
     },
   });

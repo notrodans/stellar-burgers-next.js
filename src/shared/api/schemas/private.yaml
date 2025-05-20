@@ -1,0 +1,202 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Private API - User and Orders
+  description: API endpoints that require authentication
+
+servers:
+  - url: /api
+
+paths:
+  /auth/user:
+    get:
+      tags: [User]
+      summary: Get current user data
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  user:
+                    $ref: '#/components/schemas/UserObject'
+                required: [success, user]
+    patch:
+      tags: [User]
+      summary: Update user data
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserObject'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  user:
+                    $ref: '#/components/schemas/UserObject'
+                required: [success, user]
+
+  /orders:
+    get:
+      tags: [Orders]
+      summary: Get user orders
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DetailedOrderObject'
+                  total:
+                    type: number
+                  totalToday:
+                    type: number
+                required: [success, orders, total, totalToday]
+    post:
+      tags: [Orders]
+      summary: Create new order
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ingredients:
+                  type: array
+                  items:
+                    type: string
+                    example: "60d3b41abdacab0026a733c6"
+              required: [ingredients]
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/OrderObject'
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        example: "Space флюоресцентный бургер"
+                      success:
+                        type: boolean
+                        example: true
+                    required: [success, order]
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserObject:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+      required: [email, name]
+
+    TokenObjectDto:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+      required: [success, accessToken, refreshToken]
+
+    OrderObject:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Space флюоресцентный бургер"
+        order:
+          type: object
+          properties:
+            number:
+              type: number
+              example: 12345
+          required: [number]
+
+      required: [name, order]
+
+    DetailedOrderObject:
+      type: object
+      properties:
+        ingredients:
+          type: array
+          items:
+            type: string
+            example: "60d3b41abdacab0026a733c6"
+        _id:
+          type: string
+          example: "611a9a9b9b9b9b9b9b9b9b9b"
+        name:
+          type: string
+          example: "Space флюоресцентный бургер"
+        status:
+          type: string
+          enum: [done, pending, created]
+          example: "done"
+        number:
+          type: number
+          example: 12345
+        createdAt:
+          type: string
+          format: date-time
+          example: "2021-08-15T12:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2021-08-15T12:00:00.000Z"
+      required:
+        - ingredients
+        - _id
+        - name
+        - status
+        - number
+        - createdAt
+        - updatedAt

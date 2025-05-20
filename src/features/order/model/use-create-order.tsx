@@ -1,23 +1,8 @@
-"use client";
-
-import { useEffect } from "react";
-import { useSession } from "~/entities/session";
-import { ApiError, usePostOrders } from "~/shared/api/generated";
+import { ApiError } from "~/shared/api";
+import { usePostOrders } from "~/shared/api/private-generated";
 
 export function useCreateOrder() {
-  const { currentSession } = useSession();
-
-  useEffect(() => {
-    console.log(currentSession);
-  }, [currentSession]);
-
-  const { trigger, data, error, isMutating } = usePostOrders<ApiError>({
-    request: {
-      headers: {
-        Authorization: currentSession?.accessToken,
-      },
-    },
-  });
+  const { trigger, data, error, isMutating } = usePostOrders<ApiError>();
 
   return {
     mutate: trigger,

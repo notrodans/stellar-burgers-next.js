@@ -1,8 +1,8 @@
 "use server";
 
-import { createCookieSessionStorage } from "~/shared/lib/session";
-import { Session } from "./types";
 import { revalidatePath } from "next/cache";
+import { Session } from "./types";
+import { createCookieSessionStorage } from "~/shared/lib";
 
 const sessionStorage = await createCookieSessionStorage<Session | undefined>({
   name: "__session",

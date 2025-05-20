@@ -4,10 +4,9 @@ import { PasswordInput } from "~/entities/user";
 import { cn, getApiError, useForm } from "~/shared/lib";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { Input, Button, Alert } from "~/shared/ui";
-import { PasswordWithToken } from "~/shared/api/generated";
 import { useResetPassword } from "../../model/use-reset-password";
 
-const initialData: PasswordWithToken = {
+const initialData = {
   password: "",
   token: "",
 };

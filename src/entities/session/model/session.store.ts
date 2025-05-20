@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { Session } from "./types";
 import { createStoreContext } from "~/shared/lib/zustand";
-import { destroySession, commitSessionFn } from "./session.storage.server";
+import { commitSessionFn, destroySession } from "./session.storage.server";
 
 export type SessionStore = {
   currentSession?: Session;

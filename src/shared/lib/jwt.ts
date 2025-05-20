@@ -1,4 +1,5 @@
 import { JWTPayload, jwtVerify, SignJWT } from "jose";
+import { jwtDecode } from "jwt-decode";
 
 export type SecretKey = Parameters<typeof SignJWT.prototype.sign>[0];
 export type Payload<T> = T extends object & JWTPayload ? T : JWTPayload;
@@ -21,4 +22,8 @@ export async function decrypt<T extends object = object>(
     });
     return payload as Payload<T>;
   } catch {}
+}
+
+export function decode<T>(token: string) {
+  return jwtDecode<Payload<T>>(token);
 }

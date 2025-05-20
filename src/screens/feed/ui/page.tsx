@@ -12,7 +12,7 @@ export const FeedPage: React.FC = () => {
   const content = CONSTANTS_MAP.pages.feed;
   const [currentTab, setCurrentTab] = useState("mainTab");
 
-  const { data, isLoading, isSuccess, error } = useGetStreamingOrders();
+  const { data, error, isLoading, isSuccess } = useGetStreamingOrders();
 
   if (isLoading) {
     return (
