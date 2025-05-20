@@ -1,13 +1,17 @@
 import useSWRSubscription from "swr/subscription";
+import { OrderList } from "./types";
+import { ApiError } from "~/shared/api/generated";
 
 export function useGetStreamingOrders() {
-  const { data, error } = useSWRSubscription(
+  const { data, error } = useSWRSubscription<OrderList, ApiError>(
     "wss://norma.nomoreparties.space/orders/all",
+    // @ts-expect-error ts(2349)
     (key, { next }) => {
       const socket = new WebSocket(key);
       socket.addEventListener("message", (event) =>
         next(null, JSON.parse(event.data)),
       );
+      // @ts-expect-error ts(2349)
       socket.addEventListener("error", (event) => next(event.error));
       return () => socket.close();
     },
