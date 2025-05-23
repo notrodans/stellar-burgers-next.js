@@ -1,9 +1,9 @@
 "use client";
 
 import type { LinkProps } from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import { startTransition, useEffect, useState } from "react";
 import { createStrictContext, useStrictContext } from "./react";
-import Link, { useLinkStatus } from "next/link";
 
 type LocationState =
   | {

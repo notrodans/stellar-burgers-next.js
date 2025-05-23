@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [new URL("https://code.s3.yandex.net/**")],
   },
   eslint: { ignoreDuringBuilds: true },
-  reactStrictMode: true,
+  reactStrictMode: false,
   async rewrites() {
     const BASE_API_URL = process.env.BASE_API_URL || "http://localhost:3000";
     return [

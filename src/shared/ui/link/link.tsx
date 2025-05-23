@@ -1,9 +1,9 @@
 "use client";
-import { cn } from "~/shared/lib/css";
-import { ICONS_MAP } from "~/shared/constants";
-import type { NavigationLinkProps } from "./types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ICONS_MAP } from "~/shared/constants";
+import { cn } from "~/shared/lib/css";
+import type { NavigationLinkProps } from "./types";
 
 export const NavigationLink: React.FC<NavigationLinkProps> = ({
   to,

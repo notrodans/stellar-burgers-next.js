@@ -1,7 +1,7 @@
+import Image from "next/image";
 import { cn } from "~/shared/lib/css";
 import { Paragraph } from "~/shared/ui";
-import { ConstructorIngredientProps } from "../../model/types";
-import Image from "next/image";
+import { ConstructorIngredientProps } from "../../model";
 
 export const ConstructorIngredient: React.FC<ConstructorIngredientProps> = ({
   name,

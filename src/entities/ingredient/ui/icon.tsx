@@ -1,5 +1,5 @@
-import { cn } from "~/shared/lib/css";
 import Image from "next/image";
+import { cn } from "~/shared/lib/css";
 
 export const IngredientIcon: React.FC<{
   className?: string;

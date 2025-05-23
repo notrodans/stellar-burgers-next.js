@@ -1,7 +1,11 @@
-import type { IngredientObject } from "~/entities/ingredient";
+import { IngredientType } from "~/entities/ingredient";
 
-export interface ConstructorElementProps
-  extends Pick<IngredientObject, "name" | "image" | "price" | "type" | "_id"> {
+export type ConstructorElementProps = {
+  name: string;
+  _id: string;
+  price: number;
+  image: string;
+  type: IngredientType;
   index?: number;
   positionClassName: string;
-}
+};

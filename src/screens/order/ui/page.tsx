@@ -1,16 +1,16 @@
 "use client";
 
+import { notFound, useParams } from "next/navigation";
 import {
   IngredientPrice,
   OrderIngredient,
   getIngredientsWithCounter,
   useIngredientsById,
 } from "~/entities/ingredient";
-import { formatDate, getApiError } from "~/shared/lib";
-import { CONSTANTS_MAP } from "~/shared/constants";
-import { Loader, Paragraph, ScrollArea } from "~/shared/ui";
-import { notFound, useParams } from "next/navigation";
 import { useOrderGetById } from "~/features/order";
+import { CONSTANTS_MAP } from "~/shared/constants";
+import { formatDate, getApiError } from "~/shared/lib";
+import { Loader, Paragraph, ScrollArea } from "~/shared/ui";
 
 export const OrderPage: React.FC = () => {
   const { status } = CONSTANTS_MAP.entities.order;

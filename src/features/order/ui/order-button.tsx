@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { cn, getApiError } from "~/shared/lib";
-import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
-import { Button, Loader, Modal, Paragraph } from "~/shared/ui";
-import { useOrderDetails } from "../model/use-order-details";
 import { useRouter } from "next/navigation";
-import { useUser } from "~/entities/user";
+import { useState } from "react";
 import { useConstructor } from "~/entities/constructor";
-import { useCreateOrder } from "../model";
 import { OrderModalContent } from "~/entities/order";
+import { useGetAuthUser } from "~/shared/api/private-generated";
+import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
+import { cn, getApiError } from "~/shared/lib";
+import { Button, Loader, Modal, Paragraph } from "~/shared/ui";
+import { useCreateOrder } from "../model";
+import { useOrderDetails } from "../model/use-order-details";
 
 export const OrderButton: React.FC = () => {
   const { orderButton } = CONSTANTS_MAP.features.order;
@@ -17,17 +17,18 @@ export const OrderButton: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const currentUser = useUser((s) => s.currentUser);
+  const { data: currentUser } = useGetAuthUser();
   const clearConstructor = useConstructor((s) => s.clearConstructor);
 
   const { isOrderable, ingredientIds } = useOrderDetails();
-  const { mutate: order, data, isLoading, error } = useCreateOrder();
+  const { trigger, data, isLoading, error } = useCreateOrder();
 
   const router = useRouter();
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await order({ ingredients: ingredientIds }).then(() => setShowModal(true));
+    await trigger({ ingredients: ingredientIds });
+    setShowModal(true);
   };
 
   return (

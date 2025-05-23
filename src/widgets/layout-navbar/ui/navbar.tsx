@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { ProfileButton } from "~/features/profile";
+import { CONSTANTS_MAP, ICONS_MAP, ROUTER_PATHS } from "~/shared/constants";
 import { cn } from "~/shared/lib/css";
-import { ICONS_MAP, CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
-import { NavigationLink, Button } from "~/shared/ui";
+import { Button, NavigationLink } from "~/shared/ui";
 import { Logo, MobileLogo } from "./logo";
-import { ProfileButton } from "~/features/auth";
 
 export const LayoutNavbar: React.FC = () => {
   const { homeLink, feedLink } = CONSTANTS_MAP.widgets.layoutNavbar;

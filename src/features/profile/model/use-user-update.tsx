@@ -1,16 +1,17 @@
 "use client";
-
 import { useSWRConfig } from "swr";
 import { useSession } from "~/entities/session";
 import { ApiError } from "~/shared/api";
-import { getGetAuthUserKey } from "~/shared/api/private-generated";
-import { usePostAuthLogin } from "~/shared/api/public-generated";
+import {
+  getGetAuthUserKey,
+  usePatchAuthUser,
+} from "~/shared/api/private-generated";
 
-export function useUserSignIn() {
-  const { setCurrentSession } = useSession();
+export function useUserUpdate() {
+  const { updateSession } = useSession();
   const { mutate } = useSWRConfig();
 
-  const { trigger, data, error, isMutating } = usePostAuthLogin<ApiError>({
+  const { trigger, data, error, isMutating } = usePatchAuthUser<ApiError>({
     swr: {
       async onSuccess(res) {
         await mutate(
@@ -21,9 +22,7 @@ export function useUserSignIn() {
           },
           { revalidate: false },
         );
-        await setCurrentSession({
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
+        await updateSession({
           ...res.user,
         });
       },

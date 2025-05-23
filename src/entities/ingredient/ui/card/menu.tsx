@@ -1,13 +1,9 @@
-"use client";
-import { ROUTER_PATHS } from "~/shared/constants";
-import { Paragraph } from "~/shared/ui";
-import { IngredientProps } from "../../model/types";
-import Link from "next/link";
-import { IngredientPrice } from "../price";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { Paragraph } from "~/shared/ui";
+import { IngredientProps } from "../../model";
+import { IngredientPrice } from "../price";
 
-export const Ingredient: React.FC<IngredientProps> = ({
+export const IngredientComponent: React.FC<IngredientProps> = ({
   _id,
   name,
   image,
@@ -17,7 +13,6 @@ export const Ingredient: React.FC<IngredientProps> = ({
   addSlot,
   dragRef,
 }) => {
-  const pathname = usePathname();
   return (
     <div
       data-cy={_id}
@@ -25,20 +20,14 @@ export const Ingredient: React.FC<IngredientProps> = ({
       /* @ts-expect-error bad type */
       ref={dragRef}
     >
-      <Link
-        href={{
-          pathname: ROUTER_PATHS.INGREDIENTS + `/${_id}`,
-          query: { background: pathname },
-        }}
-        className="flex flex-col justify-center items-center gap-2"
-      >
+      <div className="flex flex-col justify-center items-center gap-2">
         {counterSlot}
         <Image width={229} height={114} src={image} alt={name} />
         <IngredientPrice value={price} />
         <Paragraph size="small" className="text-center">
           {name}
         </Paragraph>
-      </Link>
+      </div>
       <div className="flex flex-col gap-1 sm:flex-row sm:gap-4 sm:flex-nowrap justify-center pt-2 lg:hidden">
         {removeSlot}
         {addSlot}

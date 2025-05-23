@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Input } from "~/shared/ui";
-import { CustomInputProps } from "../../model/types";
+import { CustomInputProps } from "../../model";
 
 export const PasswordInput: React.FC<CustomInputProps> = (props) => {
   const [showPassword, setShowPassword] = useState(false);

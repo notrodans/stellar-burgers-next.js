@@ -1,8 +1,8 @@
 "use client";
 
 import useSWRSubscription from "swr/subscription";
-import { OrderList } from "./types";
 import { ApiError } from "~/shared/api";
+import { OrderList } from "./types";
 
 export function useGetStreamingOrders() {
   const { data, error } = useSWRSubscription<OrderList, ApiError, string>(

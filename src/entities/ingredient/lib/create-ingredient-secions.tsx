@@ -1,8 +1,8 @@
-import { IngredientObject, IngredientType } from "../model/types";
+import { Ingredient, IngredientType } from "../model";
 
-export const createIngredientSections = (data: Array<IngredientObject>) => {
+export const createIngredientSections = (data: Array<Ingredient>) => {
   const ingredientSections = data.reduce<
-    Record<IngredientType, Array<IngredientObject>>
+    Record<IngredientType, Array<Ingredient>>
   >(
     (acc, item) => {
       if (!acc[item.type]) {

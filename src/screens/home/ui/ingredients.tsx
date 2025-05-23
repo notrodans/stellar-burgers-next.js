@@ -1,20 +1,21 @@
 "use client";
 
 import { useRef } from "react";
-import { IngredientDetails } from "~/widgets/ingredient-card";
-import { IngredientTabs } from "~/widgets/ingredient-tabs";
 import {
   type IngredientType,
   createIngredientSections,
-  useIngredients,
 } from "~/entities/ingredient";
-import { Paragraph, ScrollArea } from "~/shared/ui";
+import { useGetIngredients } from "~/shared/api/public-generated";
 import { CONSTANTS_MAP } from "~/shared/constants";
+import { Paragraph, ScrollArea } from "~/shared/ui";
+import { IngredientDetails } from "~/widgets/ingredient-card";
+import { IngredientTabs } from "~/widgets/ingredient-tabs";
 
 export const IngredientContainer: React.FC = () => {
   const { types } = CONSTANTS_MAP.entities.ingredient;
   const tabsConnectionRef = useRef<HTMLDivElement>(null);
-  const ingredients = useIngredients((s) => s.ingredients);
+  const { data } = useGetIngredients();
+  const ingredients = data?.data;
 
   return (
     <>

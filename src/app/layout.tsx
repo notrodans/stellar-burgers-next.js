@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { Iceland, JetBrains_Mono } from "next/font/google";
-import "./globals.css";
+import { SessionProvider } from "~/entities/session";
+import { RootLayout } from "./_/layouts/root-layout";
 import { AppLoader } from "./_/loaders/app-loader";
 import { loadAppLoaderData } from "./_/loaders/load-app-loader-data";
-import { RootLayout } from "./_/layouts/root-layout";
 import { AppProvider } from "./_/providers/app-provider";
-import { SWRConfig } from "swr";
-import { SWRProvider } from "./_/providers/swr-provider";
+import "./globals.css";
 
 const icelandFont = Iceland({
   weight: "400",
@@ -38,13 +37,13 @@ export default async function Layout({
       <body
         className={`${icelandFont.variable} ${jetBrainsMonoFont.variable} antialiased`}
       >
-        <SWRProvider>
-          <AppLoader data={{ session }}>
+        <SessionProvider value={{ session }}>
+          <AppLoader>
             <AppProvider>
               <RootLayout>{children}</RootLayout>
             </AppProvider>
           </AppLoader>
-        </SWRProvider>
+        </SessionProvider>
         <div id="modals" />
       </body>
     </html>

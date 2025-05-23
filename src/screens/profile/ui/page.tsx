@@ -1,4 +1,4 @@
-import { SettingsForm } from "~/features/auth";
+import { SettingsForm } from "~/features/profile";
 
 export function ProfilePage() {
   return <SettingsForm />;

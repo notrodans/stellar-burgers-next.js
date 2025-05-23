@@ -1,4 +1,4 @@
-import { LogoutButton } from "~/features/auth";
+import { LogoutButton } from "~/features/profile";
 import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
 import { NavigationLink, Paragraph } from "~/shared/ui";
 

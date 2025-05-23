@@ -5,7 +5,7 @@ export function useCreateOrder() {
   const { trigger, data, error, isMutating } = usePostOrders<ApiError>();
 
   return {
-    mutate: trigger,
+    trigger,
     data,
     error,
     isSuccess: data?.success,

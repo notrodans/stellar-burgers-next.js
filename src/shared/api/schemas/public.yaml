@@ -13,7 +13,7 @@ paths:
       tags: [Ingredients]
       summary: Get list of all available ingredients
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -26,7 +26,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/IngredientObject'
+                      $ref: "#/components/schemas/IngredientObject"
                 required: [success, data]
 
   /auth/login:
@@ -38,15 +38,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginFormDataDto'
+              $ref: "#/components/schemas/LoginFormDataDto"
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/UserWithTokens'
+                  - $ref: "#/components/schemas/UserWithTokens"
                   - type: object
                     properties:
                       success:
@@ -63,22 +63,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserObjectWithPasswordDto'
+              $ref: "#/components/schemas/UserObjectWithPasswordDto"
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/UserWithTokens'
+                  - $ref: "#/components/schemas/UserWithTokens"
                   - type: object
                     properties:
                       success:
                         type: boolean
                         example: true
                 required: [success]
-  
+
   /auth/token:
     post:
       tags: [Auth]
@@ -88,15 +88,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RefreshTokenRequest'
+              $ref: "#/components/schemas/RefreshTokenRequest"
       responses:
-        '200':
+        "200":
           description: Tokens refreshed successfully
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/TokenObjectDto'
+                  - $ref: "#/components/schemas/TokenObjectDto"
                   - type: object
                     properties:
                       success:
@@ -121,7 +121,7 @@ paths:
                   type: string
               required: [token]
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -134,7 +134,6 @@ paths:
                   message:
                     type: string
                 required: [success, message]
-
 
   /password-reset:
     post:
@@ -152,7 +151,7 @@ paths:
                   format: email
               required: [email]
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -175,9 +174,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PasswordWithToken'
+              $ref: "#/components/schemas/PasswordWithToken"
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -196,7 +195,7 @@ paths:
       tags: [Orders]
       summary: Get all orders (public feed)
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -209,7 +208,7 @@ paths:
                   orders:
                     type: array
                     items:
-                      $ref: '#/components/schemas/DetailedOrderObject'
+                      $ref: "#/components/schemas/DetailedOrderObject"
                   total:
                     type: number
                   totalToday:
@@ -229,7 +228,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -242,7 +241,7 @@ paths:
                   orders:
                     type: array
                     items:
-                      $ref: '#/components/schemas/DetailedOrderObject'
+                      $ref: "#/components/schemas/DetailedOrderObject"
                 required: [success, orders]
 
 components:
@@ -251,7 +250,7 @@ components:
       type: string
       enum: [bun, sauce, main]
       description: Type of the ingredient
-    
+
     IngredientObject:
       type: object
       properties:
@@ -262,7 +261,7 @@ components:
           type: string
           example: "Краторная булка N-200i"
         type:
-          $ref: '#/components/schemas/IngredientType'
+          $ref: "#/components/schemas/IngredientType"
         proteins:
           type: number
           example: 80
@@ -294,7 +293,21 @@ components:
           type: string
           description: Optional unique identifier for frontend usage
           example: "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6"
-      required: [_id, name, type, proteins, fat, carbohydrates, calories, price, image, image_mobile, image_large, __v]
+      required:
+        [
+          _id,
+          name,
+          type,
+          proteins,
+          fat,
+          carbohydrates,
+          calories,
+          price,
+          image,
+          image_mobile,
+          image_large,
+          __v,
+        ]
 
     UserObject:
       type: object
@@ -319,7 +332,7 @@ components:
 
     UserObjectWithPasswordDto:
       allOf:
-        - $ref: '#/components/schemas/UserObject'
+        - $ref: "#/components/schemas/UserObject"
         - type: object
           properties:
             password:
@@ -348,7 +361,7 @@ components:
         refreshToken:
           type: string
       required: [success, accessToken, refreshToken]
-    
+
     RefreshTokenRequest:
       type: object
       properties:
@@ -360,11 +373,11 @@ components:
 
     UserWithTokens:
       allOf:
-        - $ref: '#/components/schemas/TokenObjectDto'
+        - $ref: "#/components/schemas/TokenObjectDto"
         - type: object
           properties:
             user:
-              $ref: '#/components/schemas/UserObject'
+              $ref: "#/components/schemas/UserObject"
           required: [user]
 
     DetailedOrderObject:

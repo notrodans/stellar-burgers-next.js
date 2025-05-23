@@ -1,9 +1,9 @@
 "use client";
 
 import { PasswordInput } from "~/entities/user";
-import { cn, getApiError, useForm } from "~/shared/lib";
 import { CONSTANTS_MAP } from "~/shared/constants";
-import { Input, Button, Alert } from "~/shared/ui";
+import { cn, getApiError, useForm } from "~/shared/lib";
+import { Alert, Button, Input } from "~/shared/ui";
 import { useUserRegister } from "../../model";
 
 const initialData = {
@@ -15,12 +15,12 @@ const initialData = {
 export const RegisterForm: React.FC = () => {
   const { registerButton, errorHeadingText } =
     CONSTANTS_MAP.features.auth.register;
-  const { mutate, isLoading, error } = useUserRegister();
+  const { trigger, isLoading, error } = useUserRegister();
   const { values, handleChange } = useForm(initialData);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate(values);
+    trigger(values);
   };
 
   return (

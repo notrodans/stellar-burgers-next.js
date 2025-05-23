@@ -1,8 +1,8 @@
+import Image from "next/image";
 import { cn } from "~/shared/lib/css";
 import slogo from "~/shared/ui/slogo.png";
 import { Paragraph } from "../typography";
 import { LoaderProps } from "./types";
-import Image from "next/image";
 
 export const Loader: React.FC<LoaderProps> = ({
   text,

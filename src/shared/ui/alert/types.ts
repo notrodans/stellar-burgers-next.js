@@ -1,6 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
-import { alertVariants } from "./variants";
 import type { HTMLAttributes } from "react";
+import { alertVariants } from "./variants";
 
 export type IconName = "ErrorIcon" | "TickIcon";
 

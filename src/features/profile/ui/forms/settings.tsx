@@ -1,9 +1,9 @@
 "use client";
 
-import { EditInput, useUser } from "~/entities/user";
-import { cn, getApiError, useForm } from "~/shared/lib";
+import { useSession } from "~/entities/session";
 import { CONSTANTS_MAP } from "~/shared/constants";
-import { Alert, Button, Paragraph } from "~/shared/ui";
+import { cn, getApiError, useForm } from "~/shared/lib";
+import { Alert, Button, Input, Paragraph } from "~/shared/ui";
 import { useUserUpdate } from "../../model";
 
 type InitialState = {
@@ -13,15 +13,14 @@ type InitialState = {
 };
 
 export const SettingsForm: React.FC = () => {
-  const currentUser = useUser((s) => s.currentUser);
   const content = CONSTANTS_MAP.features.auth.profile;
-  const { mutate, data, error, isLoading, isSuccess } = useUserUpdate();
+  const { currentSession } = useSession();
+  const { trigger, error, isLoading, isSuccess } = useUserUpdate();
 
   const initialState: InitialState = {
-    name: currentUser?.name ?? "",
-    email: currentUser?.email ?? "",
+    name: currentSession?.name ?? "",
+    email: currentSession?.email ?? "",
     password: "**********",
-    ...data,
   };
 
   const { values, handleChange } = useForm(initialState);
@@ -30,7 +29,7 @@ export const SettingsForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutate(values);
+    trigger(values);
   };
 
   return (
@@ -59,23 +58,26 @@ export const SettingsForm: React.FC = () => {
           text={content.successText}
         />
       )}
-      <EditInput
+      <Input
         value={values.name}
         onChange={handleChange}
+        disabled={isLoading}
         type="text"
         name="name"
         placeholder="Имя"
       />
-      <EditInput
+      <Input
         value={values.email}
         onChange={handleChange}
+        disabled={isLoading}
         type="email"
         name="email"
         placeholder="E-mail"
       />
-      <EditInput
+      <Input
         value={values.password}
         onChange={handleChange}
+        disabled={isLoading}
         type="password"
         name="password"
         placeholder="Пароль"

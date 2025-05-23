@@ -1,4 +1,8 @@
-export { Ingredient, ConstructorIngredient, OrderIngredient } from "./card";
-export { IngredientPrice } from "./price";
-export { IngredientModal } from "./modal";
+export {
+  ConstructorIngredient,
+  IngredientComponent,
+  OrderIngredient,
+} from "./card";
 export { IngredientIcon } from "./icon";
+export { IngredientModal } from "./modal";
+export { IngredientPrice } from "./price";

@@ -1,32 +1,40 @@
 "use client";
 
 import { create } from "zustand";
-import { Session } from "./types";
 import { createStoreContext } from "~/shared/lib/zustand";
-import { commitSessionFn, destroySession } from "./session.storage.server";
+import { commitSession, destroySession } from "./session.storage.server";
+import { Session, SessionPartial } from "./types";
 
 export type SessionStore = {
   currentSession?: Session;
-  setCurrentSession: (
-    session: Session | undefined,
-    revalidateParams?: { path: string; type?: "layout" | "page" },
-  ) => Promise<void>;
+  setCurrentSession: (session: Session) => Promise<void>;
+  updateSession: (session: SessionPartial) => Promise<void>;
   removeSession: () => Promise<void>;
 };
 
 export const { useStore: useSession, Provider: SessionProvider } =
   createStoreContext(({ session }: { session: Session | undefined }) =>
-    create<SessionStore>((set) => ({
+    create<SessionStore>((set, get) => ({
       currentSession: session,
-      setCurrentSession: async (session, revalidateParams) => {
-        if (!session) return;
-
-        return await commitSessionFn(session, revalidateParams).then(() => {
+      setCurrentSession: async (session) => {
+        commitSession(session).then(() => {
           set({ currentSession: session });
         });
       },
+      updateSession: async (session) => {
+        const currentSession = get().currentSession;
+        if (!currentSession) return;
+        commitSession(session).then(() => {
+          set({
+            currentSession: {
+              ...currentSession,
+              ...session,
+            },
+          });
+        });
+      },
       removeSession: async () => {
-        return await destroySession().finally(() => {
+        return destroySession().finally(() => {
           set({ currentSession: undefined });
         });
       },

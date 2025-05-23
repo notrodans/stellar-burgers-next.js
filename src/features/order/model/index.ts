@@ -1,6 +1,6 @@
+export type { IngredientsIds, OrderList } from "./types";
 export { useCreateOrder } from "./use-create-order";
-export { useOrderDetails } from "./use-order-details";
+export { useGetOrdersProfile } from "./use-get-orders-profile";
 export { useGetStreamingOrders } from "./use-get-streaming-orders";
-export { useGetStreamingOrdersProfile } from "./use-get-streaming-orders-profile";
+export { useOrderDetails } from "./use-order-details";
 export { useOrderGetById } from "./use-order-get-by-id";
-export type { OrderList, IngredientsIds } from "./types";

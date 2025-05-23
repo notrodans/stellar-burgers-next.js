@@ -1,5 +1,5 @@
 import { Paragraph } from "~/shared/ui";
-import { OrderIngredientProps } from "../../model/types";
+import { OrderIngredientProps } from "../../model";
 import { IngredientIcon } from "../icon";
 import { IngredientPrice } from "../price";
 

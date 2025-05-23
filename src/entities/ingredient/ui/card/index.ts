@@ -1,3 +1,3 @@
 export { ConstructorIngredient } from "./constructor";
-export { Ingredient } from "./menu";
+export { IngredientComponent } from "./menu";
 export { OrderIngredient } from "./order";

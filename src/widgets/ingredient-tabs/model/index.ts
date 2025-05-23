@@ -1,1 +1,1 @@
-export type { HandleScrollType, HandleClickType, TypeTabsProps } from "./types";
+export type { HandleClickType, HandleScrollType, TypeTabsProps } from "./types";

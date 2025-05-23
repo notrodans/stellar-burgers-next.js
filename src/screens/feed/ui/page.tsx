@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { OrderCard } from "~/widgets/order-card";
-import { cn } from "~/shared/lib";
-import { CONSTANTS_MAP } from "~/shared/constants";
-import { Paragraph, Heading, ScrollArea, Loader } from "~/shared/ui";
-import { Tab } from "~/shared/ui";
 import { useGetStreamingOrders } from "~/features/order";
+import { CONSTANTS_MAP } from "~/shared/constants";
+import { cn } from "~/shared/lib";
+import { Heading, Loader, Paragraph, ScrollArea, Tab } from "~/shared/ui";
+import { OrderCard } from "~/widgets/order-card";
 
 export const FeedPage: React.FC = () => {
   const content = CONSTANTS_MAP.pages.feed;

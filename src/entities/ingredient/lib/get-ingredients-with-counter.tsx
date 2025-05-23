@@ -1,6 +1,6 @@
-import { IngredientObject, OrderIngredientProps } from "../model/types";
+import { Ingredient, OrderIngredientProps } from "../model";
 
-export const getIngredientsWithCounter = (data: Array<IngredientObject>) => {
+export const getIngredientsWithCounter = (data: Array<Ingredient>) => {
   const ingredientsWithCounter = data.reduce<
     Record<string, OrderIngredientProps>
   >((acc, cur) => {

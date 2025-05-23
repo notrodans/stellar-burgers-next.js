@@ -15,7 +15,7 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -26,7 +26,7 @@ paths:
                     type: boolean
                     example: true
                   user:
-                    $ref: '#/components/schemas/UserObject'
+                    $ref: "#/components/schemas/UserObject"
                 required: [success, user]
     patch:
       tags: [User]
@@ -38,9 +38,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserObject'
+              $ref: "#/components/schemas/UserObject"
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -51,7 +51,7 @@ paths:
                     type: boolean
                     example: true
                   user:
-                    $ref: '#/components/schemas/UserObject'
+                    $ref: "#/components/schemas/UserObject"
                 required: [success, user]
 
   /orders:
@@ -61,7 +61,7 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -74,7 +74,7 @@ paths:
                   orders:
                     type: array
                     items:
-                      $ref: '#/components/schemas/DetailedOrderObject'
+                      $ref: "#/components/schemas/DetailedOrderObject"
                   total:
                     type: number
                   totalToday:
@@ -99,13 +99,13 @@ paths:
                     example: "60d3b41abdacab0026a733c6"
               required: [ingredients]
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/OrderObject'
+                  - $ref: "#/components/schemas/OrderObject"
                   - type: object
                     properties:
                       name:
@@ -115,7 +115,6 @@ paths:
                         type: boolean
                         example: true
                     required: [success, order]
-
 
 components:
   securitySchemes:

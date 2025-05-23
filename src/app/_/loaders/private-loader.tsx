@@ -1,10 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useSession } from "~/entities/session";
 import { ROUTER_PATHS } from "~/shared/constants";
 import { useEventCallback } from "~/shared/lib";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { Loader } from "~/shared/ui";
 
 export function PrivateLoader({ children }: { children?: React.ReactNode }) {

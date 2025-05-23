@@ -1,7 +1,7 @@
+import Link from "next/link";
+import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
 import { Paragraph } from "~/shared/ui";
 import type { OrderProps } from "../model";
-import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
-import Link from "next/link";
 
 export const Order: React.FC<OrderProps> = ({
   number,

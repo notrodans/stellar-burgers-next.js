@@ -1,12 +1,12 @@
-import { IngredientObject } from "~/shared/api/public-generated";
-import type { UseIngredientsOptions } from "../model/types";
-import { useIngredients } from "./ingredients.store";
+import { useGetIngredients } from "~/shared/api/public-generated";
+import type { Ingredient, UseIngredientsOptions } from "../model/types";
 
 export const useIngredientsById = ({
   ids,
   splitByType = false,
 }: UseIngredientsOptions) => {
-  const data = useIngredients((s) => s.ingredients);
+  const { data: response } = useGetIngredients();
+  const data = response?.data;
   if (!data || !ids) return { bun: null, ingredients: [], totalPrice: 0 };
 
   const ingredients = ids
@@ -21,7 +21,7 @@ export const useIngredientsById = ({
       }
       return ingredient;
     })
-    .filter(Boolean) as Array<IngredientObject>;
+    .filter(Boolean) as Array<Ingredient>;
 
   const totalPrice = ingredients.reduce((acc, ingredient) => {
     return acc + ingredient.price;

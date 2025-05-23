@@ -1,9 +1,9 @@
 "use client";
 
 import { PasswordInput } from "~/entities/user";
-import { cn, getApiError, useForm } from "~/shared/lib";
 import { CONSTANTS_MAP } from "~/shared/constants";
-import { Input, Button, Alert } from "~/shared/ui";
+import { cn, getApiError, useForm } from "~/shared/lib";
+import { Alert, Button, Input } from "~/shared/ui";
 import { useResetPassword } from "../../model/use-reset-password";
 
 const initialData = {
@@ -14,11 +14,11 @@ const initialData = {
 export const ResetPasswordForm: React.FC = () => {
   const { resetButton, errorHeadingText } =
     CONSTANTS_MAP.features.auth.resetPassword;
-  const { mutate, isLoading, error } = useResetPassword();
+  const { trigger, isLoading, error } = useResetPassword();
   const { values, handleChange } = useForm(initialData);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate(values);
+    trigger(values);
   };
 
   return (

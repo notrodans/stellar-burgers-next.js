@@ -1,8 +1,8 @@
-import { cn } from "~/shared/lib/css";
 import { ICONS_MAP } from "~/shared/constants";
+import { cn } from "~/shared/lib/css";
 
-import type { InputProps } from "./types";
 import { forwardRef } from "react";
+import type { InputProps } from "./types";
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, icon, error, errorText, onIconClick, ...props }, ref) => {

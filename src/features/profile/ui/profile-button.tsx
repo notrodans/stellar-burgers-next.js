@@ -1,22 +1,24 @@
-import { useSession } from "~/entities/session";
+"use client";
+
+import { useGetAuthUser } from "~/shared/api/private-generated";
 import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
 import { NavigationLink } from "~/shared/ui";
 
 export const ProfileButton: React.FC = () => {
-  const session = useSession((s) => s.currentSession);
+  const { data } = useGetAuthUser();
   const { loginLink, profileLink } = CONSTANTS_MAP.features.auth.login;
 
-  if (!!session) {
+  if (!data) {
     return (
-      <NavigationLink to={ROUTER_PATHS.PROFILE} icon="ProfileIcon">
-        {profileLink}
+      <NavigationLink to={ROUTER_PATHS.SIGN_IN} icon="LoginIcon">
+        {loginLink}
       </NavigationLink>
     );
   }
 
   return (
-    <NavigationLink to={ROUTER_PATHS.SIGN_IN} icon="LoginIcon">
-      {loginLink}
+    <NavigationLink to={ROUTER_PATHS.PROFILE} icon="ProfileIcon">
+      {profileLink}
     </NavigationLink>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
-import { cn } from "~/shared/lib/css";
 import { ICONS_MAP } from "~/shared/constants";
+import { cn } from "~/shared/lib/css";
 import { Paragraph } from "~/shared/ui";
 import { AlertProps } from "./types";
 import { alertVariants } from "./variants";

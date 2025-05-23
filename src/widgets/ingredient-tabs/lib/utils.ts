@@ -1,6 +1,5 @@
 import { CONSTANTS_MAP } from "~/shared/constants";
-import type { HandleClickType } from "../model";
-import type { HandleScrollType } from "../model";
+import type { HandleClickType, HandleScrollType } from "../model";
 
 export const handleClick: HandleClickType = (setCurrent, value) => {
   const element = document.getElementById(value);

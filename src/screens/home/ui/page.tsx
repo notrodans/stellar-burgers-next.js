@@ -1,8 +1,8 @@
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { Heading } from "~/shared/ui";
+import { DNDProvider } from "../providers/DNDProvider";
 import { ConstructorContainer } from "./constructor";
 import { IngredientContainer } from "./ingredients";
-import { DNDProvider } from "../providers/DNDProvider";
 
 export const HomePage: React.FC = () => {
   const { mainText } = CONSTANTS_MAP.pages.home;

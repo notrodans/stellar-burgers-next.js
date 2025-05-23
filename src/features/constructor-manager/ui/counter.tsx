@@ -1,10 +1,10 @@
 "use client";
 
 import { useIngredientCountById } from "~/entities/constructor";
-import type { IngredientObject } from "~/entities/ingredient";
 import { Paragraph } from "~/shared/ui";
+import { Ingredient } from "../model/types";
 
-export const Counter: React.FC<Pick<IngredientObject, "_id">> = ({ _id }) => {
+export const Counter: React.FC<{ _id: Ingredient["_id"] }> = ({ _id }) => {
   const count: number = useIngredientCountById(_id);
   if (count < 1) {
     return undefined;

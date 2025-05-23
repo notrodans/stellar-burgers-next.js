@@ -1,13 +1,13 @@
 "use client";
 
-import { PasswordInput } from "~/entities/user";
-import { cn } from "~/shared/lib/css";
-import { CONSTANTS_MAP } from "~/shared/constants";
-import { Input, Button, Alert } from "~/shared/ui";
-import { getApiError } from "~/shared/lib/utils";
 import { useState } from "react";
-import { useUserSignIn } from "../../model/use-user-sign-in";
+import { PasswordInput } from "~/entities/user";
+import { CONSTANTS_MAP } from "~/shared/constants";
 import { useForm } from "~/shared/lib";
+import { cn } from "~/shared/lib/css";
+import { getApiError } from "~/shared/lib/utils";
+import { Alert, Button, Input } from "~/shared/ui";
+import { useUserSignIn } from "../../model/use-user-sign-in";
 
 const initialState = {
   email: "",
@@ -17,13 +17,13 @@ const initialState = {
 export const LoginForm: React.FC = () => {
   const { loginButton, errorHeadingText } = CONSTANTS_MAP.features.auth.login;
   const [isAlertHide, setIsAlertHide] = useState<boolean>(false);
-  const { mutate: signin, error, isLoading } = useUserSignIn();
+  const { trigger, error, isLoading } = useUserSignIn();
 
   const { values, handleChange } = useForm(initialState);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    signin(values);
+    trigger(values);
   };
 
   return (

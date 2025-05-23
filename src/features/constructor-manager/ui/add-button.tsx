@@ -1,11 +1,9 @@
 import { useConstructor } from "~/entities/constructor";
-import type { IngredientObject } from "~/entities/ingredient";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { Button } from "~/shared/ui";
+import { Ingredient } from "../model/types";
 
-export const MobileButtonAdd: React.FC<
-  Pick<IngredientObject, "_id" | "type">
-> = ({ _id, type }) => {
+export const MobileButtonAdd: React.FC<Ingredient> = ({ _id, type }) => {
   const { addText } = CONSTANTS_MAP.features.constructor.add;
   const { setBun, addIngredient } = useConstructor();
 

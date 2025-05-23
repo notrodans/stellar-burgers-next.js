@@ -1,8 +1,7 @@
 import { useConstructor, useIngredientCountById } from "~/entities/constructor";
-import { ICONS_MAP } from "~/shared/constants";
+import { CONSTANTS_MAP, ICONS_MAP } from "~/shared/constants";
 import { Button } from "~/shared/ui";
-import { CONSTANTS_MAP } from "~/shared/constants";
-import { IngredientObject } from "~/entities/ingredient";
+import { Ingredient } from "../model/types";
 
 export const DesktopButtonRemove: React.FC<{ index?: number }> = ({
   index,
@@ -20,7 +19,7 @@ export const DesktopButtonRemove: React.FC<{ index?: number }> = ({
   );
 };
 
-export const MobileButtonRemove: React.FC<Pick<IngredientObject, "_id">> = ({
+export const MobileButtonRemove: React.FC<{ _id: Ingredient["_id"] }> = ({
   _id,
 }) => {
   const { removeText } = CONSTANTS_MAP.features.constructor.remove;

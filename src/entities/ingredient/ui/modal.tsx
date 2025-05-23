@@ -1,7 +1,7 @@
+import Image from "next/image";
 import { Paragraph } from "~/shared/ui";
 import { createIngredientDetails } from "../lib";
-import type { IngredientModalProps } from "../model/types";
-import Image from "next/image";
+import type { IngredientModalProps } from "../model";
 
 export const IngredientModal: React.FC<IngredientModalProps> = ({
   name,

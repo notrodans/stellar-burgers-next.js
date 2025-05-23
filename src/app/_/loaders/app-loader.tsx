@@ -1,51 +1,36 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { preload } from "swr";
+import { getAuthUser, getGetAuthUserKey } from "~/shared/api/private-generated";
+import {
+  getGetIngredientsKey,
+  getIngredients,
+} from "~/shared/api/public-generated";
 import { Loader } from "~/shared/ui";
-import { Session, SessionProvider } from "~/entities/session";
 import { useApplayAppInterceptor } from "../interceptors/app-interceptor";
-import { useIngredients } from "~/entities/ingredient";
-import { useUser } from "~/entities/user";
-import { useGetIngredients } from "~/shared/api/public-generated";
-import { useGetAuthUser } from "~/shared/api/private-generated";
-import { ApiError } from "~/shared/api";
 
-export function AppLoader({
-  data,
-  children,
-}: {
-  data: { session: Session | undefined };
-  children: React.ReactNode;
-}) {
-  const setIngredients = useIngredients((s) => s.setIngredients);
-  const setCurrentUser = useUser((s) => s.setCurrentUser);
-  const session = data.session;
+export function AppLoader({ children }: { children: React.ReactNode }) {
+  const [isLoading, setIsLoading] = useState(true);
 
-  useApplayAppInterceptor({ session });
+  useApplayAppInterceptor();
 
-  const { isLoading: isIngredientsLoading } = useGetIngredients<ApiError>({
-    swr: {
-      onSuccess({ data }) {
-        setIngredients(data);
-      },
-    },
-  });
+  useEffect(() => {
+    setIsLoading(true);
 
-  const { isLoading: isUserLoading } = useGetAuthUser<ApiError>({
-    swr: {
-      onSuccess({ user }) {
-        setCurrentUser(user);
-      },
-    },
-  });
+    Promise.all([
+      preload(getGetIngredientsKey, getIngredients),
+      preload(getGetAuthUserKey, getAuthUser),
+    ])
+      .finally(() => {
+        setIsLoading(false);
+      })
+      .catch(() => ({}));
+  }, []);
 
-  const isDataFetching = isUserLoading || isIngredientsLoading;
+  if (isLoading) {
+    return <Loader screen />;
+  }
 
-  return (
-    <>
-      {isDataFetching && <Loader screen />}
-      {!isDataFetching ? (
-        <SessionProvider value={{ session }}>{children}</SessionProvider>
-      ) : null}
-    </>
-  );
+  return <>{children}</>;
 }

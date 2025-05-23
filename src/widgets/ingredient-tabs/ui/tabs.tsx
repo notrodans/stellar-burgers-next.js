@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { Tab } from "~/shared/ui";
-import { handleScroll, handleClick } from "../lib";
+import { handleClick, handleScroll } from "../lib";
 import type { TypeTabsProps } from "../model";
 
 export const IngredientTabs: React.FC<TypeTabsProps> = ({ containerRef }) => {

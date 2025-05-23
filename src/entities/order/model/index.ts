@@ -1,1 +1,1 @@
-export type { OrderProps, OrderModalProps } from "./types";
+export type { OrderModalProps, OrderProps } from "./types";

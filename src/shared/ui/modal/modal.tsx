@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect } from "react";
-import { cn } from "~/shared/lib/css";
-import { CONSTANTS_MAP, ICONS_MAP } from "~/shared/constants";
-import { ModalProps } from "./types";
 import { createPortal } from "react-dom";
+import { CONSTANTS_MAP, ICONS_MAP } from "~/shared/constants";
+import { cn } from "~/shared/lib/css";
+import { ModalProps } from "./types";
 
 export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
   ({ className, children, onClose, heading, ...props }, ref) => {

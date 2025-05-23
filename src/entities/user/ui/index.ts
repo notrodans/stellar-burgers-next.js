@@ -1,1 +1,1 @@
-export { PasswordInput, EditInput } from "./form";
+export { PasswordInput } from "./form";

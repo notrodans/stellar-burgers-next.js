@@ -1,8 +1,7 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { Session } from "./types";
 import { createCookieSessionStorage } from "~/shared/lib";
+import { Session } from "./types";
 
 const sessionStorage = await createCookieSessionStorage<Session | undefined>({
   name: "__session",
@@ -14,17 +13,4 @@ const sessionStorage = await createCookieSessionStorage<Session | undefined>({
 
 const { getSession, commitSession, destroySession } = sessionStorage;
 
-async function commitSessionFn(
-  session: Session,
-  revalidateParams?: { path: string; type?: "layout" | "page" },
-) {
-  return commitSession(session).then(() => {
-    if (!revalidateParams) {
-      return;
-    }
-
-    revalidatePath(revalidateParams.path, revalidateParams.type);
-  });
-}
-
-export { getSession, commitSessionFn, destroySession };
+export { commitSession, destroySession, getSession };

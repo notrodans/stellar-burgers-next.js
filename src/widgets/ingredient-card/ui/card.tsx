@@ -1,4 +1,4 @@
-import { Ingredient } from "~/entities/ingredient";
+import { IngredientComponent } from "~/entities/ingredient";
 import {
   Counter,
   MobileButtonAdd,
@@ -16,7 +16,7 @@ export const IngredientDetails: React.FC<IngredientDetailsProps> = ({
 }) => {
   const dragRef = useIngredientDrag({ _id, type });
   return (
-    <Ingredient
+    <IngredientComponent
       _id={_id}
       name={name}
       image={image}

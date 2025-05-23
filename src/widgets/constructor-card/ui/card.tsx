@@ -1,14 +1,14 @@
 "use client";
 
 import { memo, useRef } from "react";
-import { ConstructorElementProps } from "../model";
-import { ConstructorIngredient, IngredientPrice } from "~/entities/ingredient";
-import { ICONS_MAP } from "~/shared/constants";
 import { MoveIcon } from "~/entities/constructor";
+import { ConstructorIngredient, IngredientPrice } from "~/entities/ingredient";
 import {
   DesktopButtonRemove,
   useConstructorDND,
 } from "~/features/constructor-manager";
+import { ICONS_MAP } from "~/shared/constants";
+import { ConstructorElementProps } from "../model";
 
 const ConstructorElement: React.FC<ConstructorElementProps> = ({
   name,

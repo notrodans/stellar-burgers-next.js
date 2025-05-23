@@ -1,15 +1,27 @@
+"use client";
+
+import { useSWRConfig } from "swr";
 import { useSession } from "~/entities/session";
 import { ApiError } from "~/shared/api";
+import { getGetAuthUserKey } from "~/shared/api/private-generated";
 import { usePostAuthRegister } from "~/shared/api/public-generated";
-import { ROUTER_PATHS } from "~/shared/constants";
 
 export function useUserRegister() {
   const { setCurrentSession } = useSession();
+  const { mutate } = useSWRConfig();
 
   const { trigger, data, error, isMutating } = usePostAuthRegister<ApiError>({
     swr: {
-      onSuccess(res) {
-        setCurrentSession({
+      async onSuccess(res) {
+        await mutate(
+          getGetAuthUserKey(),
+          {
+            success: true,
+            user: res.user,
+          },
+          { revalidate: false },
+        );
+        await setCurrentSession({
           accessToken: res.accessToken,
           refreshToken: res.refreshToken,
           ...res.user,
@@ -19,7 +31,7 @@ export function useUserRegister() {
   });
 
   return {
-    mutate: trigger,
+    trigger,
     data,
     error,
     isSuccess: data?.success,

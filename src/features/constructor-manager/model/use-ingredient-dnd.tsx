@@ -2,11 +2,9 @@
 
 import { useDrag, useDrop } from "react-dnd";
 import { useConstructor } from "~/entities/constructor";
-import type { IngredientObject, IngredientType } from "~/entities/ingredient";
+import type { Ingredient } from "./types";
 
-export const useIngredientDrag = (
-  ingredient: Pick<IngredientObject, "_id" | "type">,
-) => {
+export const useIngredientDrag = (ingredient: Ingredient) => {
   const [, dragRef] = useDrag({
     type: "ingredient",
     item: { _id: ingredient._id, type: ingredient.type },
@@ -18,7 +16,7 @@ export const useIngredientDrop = () => {
   const { setBun, addIngredient } = useConstructor();
   const [{ isHover }, dropTarget] = useDrop({
     accept: "ingredient",
-    drop(ingredient: { _id: string; type: IngredientType }) {
+    drop(ingredient: { _id: string; type: Ingredient["type"] }) {
       if (ingredient.type === "bun") {
         setBun(ingredient._id);
       } else {

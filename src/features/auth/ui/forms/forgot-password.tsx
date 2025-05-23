@@ -1,8 +1,8 @@
 "use client";
 
-import { cn, getApiError, useForm } from "~/shared/lib";
 import { CONSTANTS_MAP } from "~/shared/constants";
-import { Input, Button, Alert } from "~/shared/ui";
+import { cn, getApiError, useForm } from "~/shared/lib";
+import { Alert, Button, Input } from "~/shared/ui";
 import { useForgotPassword } from "../../model";
 
 const initialData = {
@@ -12,12 +12,12 @@ const initialData = {
 export const ForgotPasswordForm: React.FC = () => {
   const { continueButton, errorHeadingText } =
     CONSTANTS_MAP.features.auth.forgotPassword;
-  const { mutate, isLoading, error } = useForgotPassword();
+  const { trigger, isLoading, error } = useForgotPassword();
   const { values, handleChange } = useForm(initialData);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    mutate(values);
+    trigger(values);
   };
 
   return (

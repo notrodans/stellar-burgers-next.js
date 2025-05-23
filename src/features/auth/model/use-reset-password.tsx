@@ -1,10 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useSession } from "~/entities/session";
-import { ROUTER_PATHS } from "~/shared/constants";
-import { usePostPasswordResetReset } from "~/shared/api/public-generated";
 import { ApiError } from "~/shared/api";
+import { usePostPasswordResetReset } from "~/shared/api/public-generated";
+import { ROUTER_PATHS } from "~/shared/constants";
 
 export function useResetPassword() {
   const router = useRouter();
@@ -19,7 +18,7 @@ export function useResetPassword() {
     });
 
   return {
-    mutate: trigger,
+    trigger,
     data,
     error,
     isSuccess: data?.success,
