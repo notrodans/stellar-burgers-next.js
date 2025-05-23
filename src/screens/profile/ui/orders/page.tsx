@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetOrdersProfile } from "~/features/order";
+import { useGetOrdersProfile } from "~/features/profile";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { Paragraph, ScrollArea } from "~/shared/ui";
 import { OrderCard } from "~/widgets/order-card";

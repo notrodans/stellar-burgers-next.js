@@ -13,14 +13,10 @@ export function useUserSignIn() {
   const { trigger, data, error, isMutating } = usePostAuthLogin<ApiError>({
     swr: {
       async onSuccess(res) {
-        await mutate(
-          getGetAuthUserKey(),
-          {
-            success: true,
-            user: res.user,
-          },
-          { revalidate: false },
-        );
+        await mutate(getGetAuthUserKey(), {
+          success: true,
+          user: res.user,
+        });
         await setCurrentSession({
           accessToken: res.accessToken,
           refreshToken: res.refreshToken,

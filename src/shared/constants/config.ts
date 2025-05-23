@@ -153,6 +153,8 @@ export const CONSTANTS_MAP = {
       modalCloseKey: "Escape",
       defaultError: "Пожалуйста, перезагрузите страницу или попробуйте позже",
       reloadPageText: "Перезагрузить страницу",
+      websocketUrl: "wss://norma.nomoreparties.space",
+      cookieSessionName: "session",
     },
   },
 };

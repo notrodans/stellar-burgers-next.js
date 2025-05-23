@@ -1,9 +1,11 @@
 "use server";
+
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
 import { decrypt, encrypt, type Payload, type SecretKey } from "./jwt";
 
-type CookieConfig = Omit<ResponseCookie, "value"> & {
+type CookieConfig = Omit<ResponseCookie, "value" | "maxAge"> & {
+  maxAge: number;
   secret: SecretKey;
 };
 
@@ -17,8 +19,9 @@ export async function setCookie(
   value: string,
   config?: Omit<CookieConfig, "name">,
 ): Promise<void> {
+  const isSecured = config?.secure;
   const cookieStore = await cookies();
-  cookieStore.set(name, value, {
+  cookieStore.set(isSecured ? `__Secure-${name}` : name, value, {
     ...config,
   });
 }
@@ -27,19 +30,31 @@ export async function createSession<T extends object = object>(
   data: Payload<T>,
   config: CookieConfig,
 ): Promise<void> {
-  const session = await encrypt<T>({ ...data }, config.secret);
+  const session = await encrypt<T>(
+    { ...data },
+    {
+      secret: config.secret,
+      maxAge: config.maxAge,
+    },
+  );
   await setCookie(config.name, session, config);
 }
 
-export async function updateSession<T extends object = object>(
+async function updateSession<T extends object = object>(
   data: Payload<T>,
   config: CookieConfig & { maxAge: number },
 ): Promise<void | undefined> {
   const cookiesStore = await cookies();
   const session = cookiesStore.get(config.name)?.value;
-  const payload = await decrypt<T>(session, config.secret);
+  const payload = await decrypt(session, config.secret);
 
-  const newSession = await encrypt<T>({ ...payload, ...data }, config.secret);
+  const newSession = await encrypt<T>(
+    { ...payload, ...data },
+    {
+      secret: config.secret,
+      maxAge: config.maxAge,
+    },
+  );
 
   await setCookie(config.name, newSession, {
     ...config,
@@ -49,12 +64,11 @@ export async function updateSession<T extends object = object>(
 async function createCookieStorageFactory<T>(
   config: CreateSessionStorageConfig,
 ) {
-  const sessionName = config.name;
   const encodedSecret = new TextEncoder().encode(config.secret);
 
   const getSession = async (): Promise<T | undefined> => {
     const cookiesStore = await cookies();
-    const session = cookiesStore.get(sessionName);
+    const session = cookiesStore.get(config.name);
     return session
       ? ((await decrypt(session.value, encodedSecret)) as T)
       : undefined;
@@ -69,7 +83,7 @@ async function createCookieStorageFactory<T>(
 
   const destroySession = async (): Promise<void> => {
     const cookiesStore = await cookies();
-    cookiesStore.delete(sessionName);
+    cookiesStore.delete(config.name);
   };
 
   return {

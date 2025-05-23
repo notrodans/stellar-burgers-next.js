@@ -14,8 +14,8 @@ export default function Layout({
   const router = useRouter();
 
   useEffect(() => {
-    if (session) return;
-    router.replace(ROUTER_PATHS.SIGN_IN);
+    if (!session) return;
+    router.replace(ROUTER_PATHS.HOME);
   }, [session, router]);
 
   return <>{children}</>;

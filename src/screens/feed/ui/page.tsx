@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useGetStreamingOrders } from "~/features/order";
+import { useGetStreamingOrders } from "~/entities/order";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { cn } from "~/shared/lib";
 import { Heading, Loader, Paragraph, ScrollArea, Tab } from "~/shared/ui";

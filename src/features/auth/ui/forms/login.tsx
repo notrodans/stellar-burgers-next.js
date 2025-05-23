@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { PasswordInput } from "~/entities/user";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { useForm } from "~/shared/lib";
 import { cn } from "~/shared/lib/css";
 import { getApiError } from "~/shared/lib/utils";
 import { Alert, Button, Input } from "~/shared/ui";
 import { useUserSignIn } from "../../model/use-user-sign-in";
+import { PasswordInput } from "../password-input";
 
 const initialState = {
   email: "",

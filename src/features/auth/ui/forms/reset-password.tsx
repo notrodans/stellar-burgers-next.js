@@ -1,10 +1,10 @@
 "use client";
 
-import { PasswordInput } from "~/entities/user";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { cn, getApiError, useForm } from "~/shared/lib";
 import { Alert, Button, Input } from "~/shared/ui";
 import { useResetPassword } from "../../model/use-reset-password";
+import { PasswordInput } from "../password-input";
 
 const initialData = {
   password: "",

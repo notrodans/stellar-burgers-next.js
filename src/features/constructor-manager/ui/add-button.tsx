@@ -1,7 +1,7 @@
 import { useConstructor } from "~/entities/constructor";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { Button } from "~/shared/ui";
-import { Ingredient } from "../model/types";
+import { Ingredient } from "../model";
 
 export const MobileButtonAdd: React.FC<Ingredient> = ({ _id, type }) => {
   const { addText } = CONSTANTS_MAP.features.constructor.add;

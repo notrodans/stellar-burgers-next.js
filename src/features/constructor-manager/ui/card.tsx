@@ -3,12 +3,9 @@
 import { memo, useRef } from "react";
 import { MoveIcon } from "~/entities/constructor";
 import { ConstructorIngredient, IngredientPrice } from "~/entities/ingredient";
-import {
-  DesktopButtonRemove,
-  useConstructorDND,
-} from "~/features/constructor-manager";
 import { ICONS_MAP } from "~/shared/constants";
-import { ConstructorElementProps } from "../model";
+import { ConstructorElementProps, useConstructorDND } from "../model";
+import { DesktopButtonRemove } from "./remove-button";
 
 const ConstructorElement: React.FC<ConstructorElementProps> = ({
   name,

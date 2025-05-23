@@ -7,7 +7,7 @@ import {
   getIngredientsWithCounter,
   useIngredientsById,
 } from "~/entities/ingredient";
-import { useOrderGetById } from "~/features/order";
+import { useGetOrderById } from "~/entities/order";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { formatDate, getApiError } from "~/shared/lib";
 import { Loader, Paragraph, ScrollArea } from "~/shared/ui";
@@ -16,7 +16,7 @@ export const OrderPage: React.FC = () => {
   const { status } = CONSTANTS_MAP.entities.order;
   const { loadingText, ingredientsText } = CONSTANTS_MAP.pages.order;
   const { id } = useParams<{ id: string }>();
-  const { data, error, isLoading, isSuccess } = useOrderGetById(id);
+  const { data, error, isLoading, isSuccess } = useGetOrderById(id);
   const { ingredients, totalPrice } = useIngredientsById({
     ids: data?.ingredients,
   });

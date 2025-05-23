@@ -8,8 +8,7 @@ import { useGetAuthUser } from "~/shared/api/private-generated";
 import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
 import { cn, getApiError } from "~/shared/lib";
 import { Button, Loader, Modal, Paragraph } from "~/shared/ui";
-import { useCreateOrder } from "../model";
-import { useOrderDetails } from "../model/use-order-details";
+import { useCreateOrder, useOrderDetails } from "../model";
 
 export const OrderButton: React.FC = () => {
   const { orderButton } = CONSTANTS_MAP.features.order;

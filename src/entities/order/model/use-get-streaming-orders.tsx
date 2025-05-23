@@ -2,11 +2,13 @@
 
 import useSWRSubscription from "swr/subscription";
 import { ApiError } from "~/shared/api";
+import { CONSTANTS_MAP } from "~/shared/constants";
 import { OrderList } from "./types";
 
+const socketUrl = CONSTANTS_MAP.shared.config.websocketUrl + "/orders/all";
 export function useGetStreamingOrders() {
   const { data, error } = useSWRSubscription<OrderList, ApiError, string>(
-    "wss://norma.nomoreparties.space/orders/all",
+    socketUrl,
     (key, { next }) => {
       const socket = new WebSocket(key);
       socket.addEventListener("message", (event) =>

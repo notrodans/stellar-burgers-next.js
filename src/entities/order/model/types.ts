@@ -1,4 +1,7 @@
-import { DetailedOrderObjectStatus } from "~/shared/api/public-generated";
+import {
+  DetailedOrderObject,
+  DetailedOrderObjectStatus,
+} from "~/shared/api/public-generated";
 
 type OrderObject = {
   name: string;
@@ -17,4 +20,11 @@ export type OrderModalProps = {
   order: {
     number: number;
   };
+};
+
+export type OrderList = {
+  orders: DetailedOrderObject[] | [];
+  total: number;
+  totalToday: number;
+  success: boolean;
 };

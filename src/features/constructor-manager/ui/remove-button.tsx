@@ -1,7 +1,7 @@
 import { useConstructor, useIngredientCountById } from "~/entities/constructor";
 import { CONSTANTS_MAP, ICONS_MAP } from "~/shared/constants";
 import { Button } from "~/shared/ui";
-import { Ingredient } from "../model/types";
+import { Ingredient } from "../model";
 
 export const DesktopButtonRemove: React.FC<{ index?: number }> = ({
   index,
