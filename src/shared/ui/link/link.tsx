@@ -20,9 +20,13 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
     <Link
       href={to}
       {...props}
-      className={cn(className, "flex flex-row gap-2 text-inactive", {
-        "text-white": isActive,
-      })}
+      className={cn(
+        className,
+        "flex flex-row gap-2 text-inactive hover:text-white transition-colors",
+        {
+          "text-white": isActive,
+        },
+      )}
     >
       <>
         {IconComponent && <IconComponent />}

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useConstructor } from "~/entities/constructor";
 import { OrderModalContent } from "~/entities/order";
-import { useGetAuthUser } from "~/shared/api/private-generated";
+import { useSession } from "~/entities/session";
 import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
 import { cn, getApiError } from "~/shared/lib";
 import { Button, Loader, Modal, Paragraph } from "~/shared/ui";
@@ -16,7 +16,7 @@ export const OrderButton: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const { data: currentUser } = useGetAuthUser();
+  const session = useSession((s) => s.currentSession);
   const clearConstructor = useConstructor((s) => s.clearConstructor);
 
   const { isOrderable, ingredientIds } = useOrderDetails();
@@ -26,15 +26,17 @@ export const OrderButton: React.FC = () => {
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await trigger({ ingredients: ingredientIds });
-    setShowModal(true);
+    trigger({ ingredients: ingredientIds }).then(() => {
+      clearConstructor();
+      setShowModal(true);
+    });
   };
 
   return (
     <>
       <Button
         onClick={
-          currentUser ? handleClick : () => router.replace(ROUTER_PATHS.SIGN_IN)
+          session ? handleClick : () => router.replace(ROUTER_PATHS.SIGN_IN)
         }
         disabled={!isOrderable || isLoading}
         className={cn(isLoading && "animate-pulse")}
@@ -44,7 +46,6 @@ export const OrderButton: React.FC = () => {
       {showModal && (
         <Modal
           onClose={() => {
-            clearConstructor();
             setShowModal(false);
           }}
         >

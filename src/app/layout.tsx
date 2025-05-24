@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Iceland, JetBrains_Mono } from "next/font/google";
-import { SessionProvider } from "~/entities/session";
 import { RootLayout } from "./_/layouts/root-layout";
 import { AppLoader } from "./_/loaders/app-loader";
 import { loadAppLoaderData } from "./_/loaders/load-app-loader-data";
@@ -37,13 +36,11 @@ export default async function Layout({
       <body
         className={`${icelandFont.variable} ${jetBrainsMonoFont.variable} antialiased`}
       >
-        <SessionProvider value={{ session }}>
-          <AppLoader>
-            <AppProvider>
-              <RootLayout>{children}</RootLayout>
-            </AppProvider>
-          </AppLoader>
-        </SessionProvider>
+        <AppLoader session={session}>
+          <AppProvider>
+            <RootLayout>{children}</RootLayout>
+          </AppProvider>
+        </AppLoader>
         <div id="modals" />
       </body>
     </html>

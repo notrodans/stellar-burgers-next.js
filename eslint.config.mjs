@@ -70,6 +70,28 @@ export default defineConfig([
                 [
                   "shared",
                   {
+                    segment: "model",
+                  },
+                ],
+              ],
+              allow: "*/index.ts",
+            },
+            {
+              target: [
+                [
+                  "shared",
+                  {
+                    segment: "model",
+                  },
+                ],
+              ],
+              allow: "*.(ts)",
+            },
+            {
+              target: [
+                [
+                  "shared",
+                  {
                     segment: "lib",
                   },
                 ],

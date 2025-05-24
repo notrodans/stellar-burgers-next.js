@@ -2,8 +2,14 @@
 
 import { create } from "zustand";
 import { createStoreContext } from "~/shared/lib/zustand";
-import { commitSession, destroySession } from "./session.storage.server";
-import { Session, SessionPartial } from "./types";
+import {
+  commitSession,
+  destroySession,
+  Session,
+  updateCurrentSession,
+} from "~/shared/model";
+
+export type SessionPartial = Partial<Session>;
 
 export type SessionStore = {
   currentSession?: Session;
@@ -24,7 +30,7 @@ export const { useStore: useSession, Provider: SessionProvider } =
       updateSession: async (session) => {
         const currentSession = get().currentSession;
         if (!currentSession) return;
-        commitSession(session).then(() => {
+        updateCurrentSession(session).then(() => {
           set({
             currentSession: {
               ...currentSession,

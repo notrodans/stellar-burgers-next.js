@@ -7,15 +7,21 @@ import {
 } from "~/entities/ingredient";
 import { useGetIngredients } from "~/shared/api/public-generated";
 import { CONSTANTS_MAP } from "~/shared/constants";
-import { Paragraph, ScrollArea } from "~/shared/ui";
+import { useAppearanceDelay } from "~/shared/lib";
+import { Loader, Paragraph, ScrollArea } from "~/shared/ui";
 import { IngredientDetails } from "~/widgets/ingredient-card";
 import { IngredientTabs } from "~/widgets/ingredient-tabs";
 
 export const IngredientContainer: React.FC = () => {
   const { types } = CONSTANTS_MAP.entities.ingredient;
   const tabsConnectionRef = useRef<HTMLDivElement>(null);
-  const { data } = useGetIngredients();
+  const { data, isLoading } = useGetIngredients();
   const ingredients = data?.data;
+
+  const isAppearanceLoading = useAppearanceDelay(isLoading);
+
+  if (isAppearanceLoading)
+    return <Loader className="mt-10" text="Загружаю ингредиенты" />;
 
   return (
     <>

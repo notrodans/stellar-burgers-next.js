@@ -26,20 +26,6 @@ export async function setCookie(
   });
 }
 
-export async function createSession<T extends object = object>(
-  data: Payload<T>,
-  config: CookieConfig,
-): Promise<void> {
-  const session = await encrypt<T>(
-    { ...data },
-    {
-      secret: config.secret,
-      maxAge: config.maxAge,
-    },
-  );
-  await setCookie(config.name, session, config);
-}
-
 async function updateSession<T extends object = object>(
   data: Payload<T>,
   config: CookieConfig & { maxAge: number },
@@ -81,6 +67,18 @@ async function createCookieStorageFactory<T>(
     });
   };
 
+  const updateCurrentSession = async (data: Payload<T>): Promise<void> => {
+    const session = (await getSession()) as Payload<T> | undefined;
+    if (!session) return;
+    await updateSession(
+      { ...session, ...data },
+      {
+        ...config,
+        secret: encodedSecret,
+      },
+    );
+  };
+
   const destroySession = async (): Promise<void> => {
     const cookiesStore = await cookies();
     cookiesStore.delete(config.name);
@@ -89,6 +87,7 @@ async function createCookieStorageFactory<T>(
   return {
     getSession,
     commitSession,
+    updateCurrentSession,
     destroySession,
   };
 }

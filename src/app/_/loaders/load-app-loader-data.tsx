@@ -1,4 +1,4 @@
-import { getSession, Session } from "~/entities/session";
+import { getSession, Session } from "~/shared/model";
 
 export const loadAppLoaderData = async (): Promise<Session | undefined> => {
   try {

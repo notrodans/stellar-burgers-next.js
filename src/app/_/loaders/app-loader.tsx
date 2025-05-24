@@ -1,36 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { preload } from "swr";
-import { getAuthUser, getGetAuthUserKey } from "~/shared/api/private-generated";
-import {
-  getGetIngredientsKey,
-  getIngredients,
-} from "~/shared/api/public-generated";
-import { Loader } from "~/shared/ui";
+import { SessionProvider } from "~/entities/session";
+import { Session } from "~/shared/model";
 import { useApplayAppInterceptor } from "../interceptors/app-interceptor";
+import { AppProvider } from "../providers/app-provider";
 
-export function AppLoader({ children }: { children: React.ReactNode }) {
-  const [isLoading, setIsLoading] = useState(true);
-
+export function AppLoader({
+  session,
+  children,
+}: {
+  session: Session | undefined;
+  children: React.ReactNode;
+}) {
   useApplayAppInterceptor();
 
-  useEffect(() => {
-    setIsLoading(true);
-
-    Promise.all([
-      preload(getGetIngredientsKey, getIngredients),
-      preload(getGetAuthUserKey, getAuthUser),
-    ])
-      .finally(() => {
-        setIsLoading(false);
-      })
-      .catch(() => ({}));
-  }, []);
-
-  if (isLoading) {
-    return <Loader screen />;
-  }
-
-  return <>{children}</>;
+  return (
+    <SessionProvider value={{ session }}>
+      <AppProvider>{children}</AppProvider>
+    </SessionProvider>
+  );
 }

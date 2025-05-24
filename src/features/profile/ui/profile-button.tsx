@@ -1,14 +1,14 @@
 "use client";
 
-import { useGetAuthUser } from "~/shared/api/private-generated";
+import { useSession } from "~/entities/session";
 import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
 import { NavigationLink } from "~/shared/ui";
 
 export const ProfileButton: React.FC = () => {
-  const { data } = useGetAuthUser();
+  const { currentSession: session } = useSession();
   const { loginLink, profileLink } = CONSTANTS_MAP.features.auth.login;
 
-  if (!data) {
+  if (!session) {
     return (
       <NavigationLink to={ROUTER_PATHS.SIGN_IN} icon="LoginIcon">
         {loginLink}

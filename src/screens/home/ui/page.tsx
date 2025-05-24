@@ -9,7 +9,7 @@ export const HomePage: React.FC = () => {
   return (
     <DNDProvider>
       <Heading className="text-center lg:text-left">{mainText}</Heading>
-      <div className="flex flex-row flex-wrap lg:gap-10 lg:flex-nowrap">
+      <div className="grow flex flex-row flex-wrap lg:gap-10 lg:flex-nowrap">
         <div className="flex flex-col w-full lg:basis-1/2">
           <IngredientContainer />
         </div>
