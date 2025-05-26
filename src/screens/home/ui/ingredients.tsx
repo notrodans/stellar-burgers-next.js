@@ -18,7 +18,9 @@ export const IngredientContainer: React.FC = () => {
   const { data, isLoading } = useGetIngredients();
   const ingredients = data?.data;
 
-  const isAppearanceLoading = useAppearanceDelay(isLoading);
+  const isAppearanceLoading = useAppearanceDelay(isLoading, {
+    defaultValue: true,
+  });
 
   if (isAppearanceLoading)
     return <Loader className="mt-10" text="Загружаю ингредиенты" />;
