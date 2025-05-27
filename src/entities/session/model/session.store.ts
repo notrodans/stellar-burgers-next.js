@@ -40,7 +40,7 @@ export const { useStore: useSession, Provider: SessionProvider } =
         });
       },
       removeSession: async () => {
-        return destroySession().finally(() => {
+        destroySession().then(() => {
           set({ currentSession: undefined });
         });
       },

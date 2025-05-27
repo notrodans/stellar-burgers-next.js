@@ -18,7 +18,7 @@ export async function encrypt<T>(
     .sign(config.secret);
 }
 
-export async function decrypt<T extends object = object>(
+export async function decrypt<T>(
   session: string | undefined = "",
   secret: SecretKey,
 ): Promise<Payload<T> | undefined> {
@@ -27,7 +27,9 @@ export async function decrypt<T extends object = object>(
       algorithms: ["HS256"],
     });
     return payload as Payload<T>;
-  } catch {}
+  } catch {
+    return undefined;
+  }
 }
 
 export function decode<T>(token: string) {

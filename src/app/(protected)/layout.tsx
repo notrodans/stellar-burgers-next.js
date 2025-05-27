@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSession } from "~/entities/session";
-import { ROUTER_PATHS } from "~/shared/constants";
 
 export default function Layout({
   children,
@@ -15,7 +14,7 @@ export default function Layout({
 
   useEffect(() => {
     if (session) return;
-    router.replace(ROUTER_PATHS.SIGN_IN);
+    // router.replace(ROUTER_PATHS.SIGN_IN);
   }, [session, router]);
 
   return <>{children}</>;

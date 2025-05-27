@@ -25,7 +25,7 @@ export async function setCookie(
   });
 }
 
-async function updateSession<T extends object = object>(
+async function updateSession<T>(
   data: Payload<T>,
   config: CookieConfig & { maxAge: number },
 ): Promise<void | undefined> {
@@ -51,12 +51,10 @@ async function createCookieStorageFactory<T>(
 ) {
   const encodedSecret = new TextEncoder().encode(config.secret);
 
-  const getSession = async (): Promise<T | undefined> => {
+  const getSession = async (): Promise<Payload<T> | undefined> => {
     const cookiesStore = await cookies();
     const session = cookiesStore.get(config.name);
-    return session
-      ? ((await decrypt(session.value, encodedSecret)) as T)
-      : undefined;
+    return await decrypt(session?.value, encodedSecret);
   };
 
   const commitSession = async (data: Payload<T>): Promise<void> => {
@@ -67,7 +65,7 @@ async function createCookieStorageFactory<T>(
   };
 
   const updateCurrentSession = async (data: Payload<T>): Promise<void> => {
-    const session = (await getSession()) as Payload<T> | undefined;
+    const session = await getSession();
     if (!session) return;
     await updateSession(
       { ...session, ...data },
