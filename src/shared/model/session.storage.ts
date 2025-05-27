@@ -10,12 +10,19 @@ export type Session = {
   refreshToken: string;
 };
 
+const isSecured =
+  process.env.NEXT_PUBLIC_URL.startsWith("https://") &&
+  process.env.NODE_ENV === "production";
+
+function getSessioName(name: string, isSecured: boolean) {
+  return isSecured ? `__Secure-${name}` : name;
+}
+
 const sessionStorage = await createCookieSessionStorage<Session | undefined>({
-  name: CONSTANTS_MAP.shared.config.cookieSessionName,
+  name: getSessioName(CONSTANTS_MAP.shared.config.cookieSessionName, isSecured),
   maxAge: 60 * 60 * 24 * 7,
-  secure:
-    process.env.NEXT_PUBLIC_URL.startsWith("https://") &&
-    process.env.NODE_ENV === "production",
+  httpOnly: true,
+  secure: isSecured,
   secret: process.env.SESSION_SECRET,
 });
 

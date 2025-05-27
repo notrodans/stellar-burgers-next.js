@@ -19,9 +19,8 @@ export async function setCookie(
   value: string,
   config?: Omit<CookieConfig, "name">,
 ): Promise<void> {
-  const isSecured = config?.secure;
   const cookieStore = await cookies();
-  cookieStore.set(isSecured ? `__Secure-${name}` : name, value, {
+  cookieStore.set(name, value, {
     ...config,
   });
 }

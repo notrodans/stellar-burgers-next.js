@@ -1,21 +1,20 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
-import { decode } from "../lib";
-import { isClient } from "../lib/next";
+import { decode, isClient } from "../lib";
 import { getSession, updateCurrentSession } from "../model";
 import { postAuthToken } from "./public-generated";
 
-let refreshPromise: Promise<{ accessToken?: string }> | null = null;
+const baseURL = isClient() ? "/api" : process.env.BASE_API_URL + "/api";
+let refreshPromise: Promise<void> | null = null;
 
 export const publicApiInstance = axios.create({
-  baseURL: isClient() ? "/api" : process.env.BASE_API_URL + "/api",
-  withCredentials: true,
+  baseURL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 export const privateApiInstance = axios.create({
-  baseURL: isClient() ? "/api" : process.env.BASE_API_URL + "/api",
+  baseURL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -27,7 +26,7 @@ privateApiInstance.interceptors.request.use(async (request) => {
   if (!session) return request;
 
   const { accessToken, refreshToken } = session;
-  request.headers.Authorization = accessToken;
+  request.headers.set("Authorization", accessToken, true);
 
   const decodedAccessToken = decode(accessToken);
   const tokenExpiresAt = decodedAccessToken.exp!;
@@ -43,8 +42,7 @@ privateApiInstance.interceptors.request.use(async (request) => {
           accessToken,
           refreshToken,
         });
-        request.headers.Authorization = accessToken;
-        return { accessToken };
+        request.headers.set("Authorization", accessToken, true);
       })
       .finally(() => {
         refreshPromise = null;
