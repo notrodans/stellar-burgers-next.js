@@ -19,7 +19,7 @@ export const IngredientContainer: React.FC = () => {
   const ingredients = data?.data;
 
   const isAppearanceLoading = useAppearanceDelay(isLoading, {
-    defaultValue: true,
+    appearenceDelay: 50,
   });
 
   if (isAppearanceLoading)
