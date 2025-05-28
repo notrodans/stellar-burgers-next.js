@@ -3,7 +3,6 @@
 import { SessionProvider } from "~/entities/session";
 import { Session } from "~/shared/model";
 import { useApplayAppInterceptor } from "../interceptors/app-interceptor";
-import { AppProvider } from "../providers/app-provider";
 
 export function AppLoader({
   session,
@@ -14,9 +13,5 @@ export function AppLoader({
 }) {
   useApplayAppInterceptor();
 
-  return (
-    <SessionProvider value={{ session }}>
-      <AppProvider>{children}</AppProvider>
-    </SessionProvider>
-  );
+  return <SessionProvider value={{ session }}>{children}</SessionProvider>;
 }
