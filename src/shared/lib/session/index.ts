@@ -1,6 +1,8 @@
+"use server";
+
+import { cookies } from "next/headers";
 import { Payload } from "../jwt";
 import {
-  destroySession as destroySessionFn,
   getSession as getSessionFn,
   updateSession as updateSessionFn,
 } from "./actions";
@@ -35,7 +37,8 @@ function createCookieSessionStorageFactory<T>(
   };
 
   const destroySession = async (): Promise<void> => {
-    destroySessionFn(config.name);
+    const cookiesStore = await cookies();
+    cookiesStore.delete(config.name);
   };
 
   return {

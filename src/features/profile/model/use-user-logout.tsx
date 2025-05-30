@@ -1,18 +1,23 @@
 "use client";
 
 import { useSWRConfig } from "swr";
-import { useSession } from "~/entities/session";
+import useSWRMutation from "swr/mutation";
 import { getGetAuthUserKey } from "~/shared/api/private-generated";
 import { usePostAuthLogout } from "~/shared/api/public-generated";
+import { destroySession } from "~/shared/model";
 
 export function useUserLogout() {
   const { mutate } = useSWRConfig();
-  const { removeSession } = useSession();
+  const { trigger: removeSession } = useSWRMutation("session/logout", () => {
+    destroySession();
+  });
+
   const { trigger, isMutating } = usePostAuthLogout({
     swr: {
       async onSuccess() {
-        await mutate(getGetAuthUserKey(), undefined, { revalidate: false });
-        await removeSession();
+        await removeSession().then(() => {
+          mutate(getGetAuthUserKey(), undefined, { revalidate: false });
+        });
       },
     },
   });

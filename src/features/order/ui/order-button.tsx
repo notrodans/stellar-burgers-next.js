@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useConstructor } from "~/entities/constructor";
 import { OrderModalContent } from "~/entities/order";
-import { useSession } from "~/entities/session";
+import { useGetAuthUser } from "~/shared/api/private-generated";
 import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
 import { cn, getApiError } from "~/shared/lib";
 import { Button, Loader, Modal, Paragraph } from "~/shared/ui";
@@ -16,7 +16,7 @@ export const OrderButton: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const session = useSession((s) => s.currentSession);
+  const { data: session } = useGetAuthUser();
   const clearConstructor = useConstructor((s) => s.clearConstructor);
 
   const { isOrderable, ingredientIds } = useOrderDetails();
