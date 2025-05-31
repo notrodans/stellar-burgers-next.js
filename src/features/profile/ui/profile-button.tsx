@@ -1,20 +1,10 @@
 "use client";
 
-import { useSession } from "~/entities/session";
 import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
 import { NavigationLink } from "~/shared/ui";
 
 export const ProfileButton: React.FC = () => {
-  const { currentSession: session } = useSession();
-  const { loginLink, profileLink } = CONSTANTS_MAP.features.auth.login;
-
-  if (!session) {
-    return (
-      <NavigationLink to={ROUTER_PATHS.SIGN_IN} icon="LoginIcon">
-        {loginLink}
-      </NavigationLink>
-    );
-  }
+  const { profileLink } = CONSTANTS_MAP.features.auth.login;
 
   return (
     <NavigationLink to={ROUTER_PATHS.PROFILE} icon="ProfileIcon">

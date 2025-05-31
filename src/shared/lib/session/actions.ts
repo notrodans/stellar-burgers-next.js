@@ -45,10 +45,4 @@ async function updateSession<T>(
     ...config,
   });
 }
-
-async function destroySession(name: string): Promise<void> {
-  const cookiesStore = await cookies();
-  cookiesStore.delete(name);
-}
-
-export { destroySession, getSession, updateSession };
+export { getSession, updateSession };

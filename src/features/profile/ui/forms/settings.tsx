@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "~/entities/session";
+import { useGetAuthUser } from "~/shared/api/private-generated";
 import { CONSTANTS_MAP } from "~/shared/constants";
 import { cn, getApiError, useForm } from "~/shared/lib";
 import { Alert, Button, Input, Paragraph } from "~/shared/ui";
@@ -14,12 +14,12 @@ type InitialState = {
 
 export const SettingsForm: React.FC = () => {
   const content = CONSTANTS_MAP.features.auth.profile;
-  const { currentSession } = useSession();
+  const { data: session } = useGetAuthUser();
   const { trigger, error, isLoading, isSuccess } = useUserUpdate();
 
   const initialState: InitialState = {
-    name: currentSession?.name ?? "",
-    email: currentSession?.email ?? "",
+    name: session?.user.name ?? "",
+    email: session?.user.email ?? "",
     password: "**********",
   };
 

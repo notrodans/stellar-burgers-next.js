@@ -1,19 +1,21 @@
 "use client";
 import { useSWRConfig } from "swr";
-import { useSession } from "~/entities/session";
 import { ApiError } from "~/shared/api";
 import {
   getGetAuthUserKey,
   usePatchAuthUser,
 } from "~/shared/api/private-generated";
+import { updateCurrentSession } from "~/shared/model";
 
 export function useUserUpdate() {
-  const { updateSession } = useSession();
   const { mutate } = useSWRConfig();
 
   const { trigger, data, error, isMutating } = usePatchAuthUser<ApiError>({
     swr: {
       async onSuccess(res) {
+        await updateCurrentSession({
+          ...res.user,
+        });
         await mutate(
           getGetAuthUserKey(),
           {
@@ -22,9 +24,6 @@ export function useUserUpdate() {
           },
           { revalidate: false },
         );
-        await updateSession({
-          ...res.user,
-        });
       },
     },
   });

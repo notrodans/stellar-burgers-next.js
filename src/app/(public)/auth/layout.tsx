@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useSession } from "~/entities/session";
+import { useGetAuthUser } from "~/shared/api/private-generated";
 import { ROUTER_PATHS } from "~/shared/constants";
 
 export default function Layout({
@@ -10,12 +10,12 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = useSession((s) => s.currentSession);
+  const { data: session } = useGetAuthUser();
   const router = useRouter();
 
   useEffect(() => {
     if (!session) return;
-    router.replace(ROUTER_PATHS.HOME);
+    router.replace(ROUTER_PATHS.PROFILE);
   }, [session, router]);
 
   return <>{children}</>;

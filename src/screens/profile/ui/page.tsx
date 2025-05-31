@@ -1,5 +1,5 @@
 import { SettingsForm } from "~/features/profile";
 
-export function ProfilePage() {
+export async function ProfilePage() {
   return <SettingsForm />;
 }

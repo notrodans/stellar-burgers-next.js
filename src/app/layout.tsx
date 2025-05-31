@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Iceland, JetBrains_Mono } from "next/font/google";
 import { RootLayout } from "./_/layouts/root-layout";
 import { AppLoader } from "./_/loaders/app-loader";
-import { loadAppLoaderData } from "./_/loaders/load-app-loader-data";
 import { AppProvider } from "./_/providers/app-provider";
 import "./globals.css";
 
@@ -24,19 +23,18 @@ export const metadata: Metadata = {
   title: "Stellar Burgers",
 };
 
-export default async function Layout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await loadAppLoaderData();
   return (
     <html lang="en">
       <GetHead />
       <body
         className={`${icelandFont.variable} ${jetBrainsMonoFont.variable} antialiased`}
       >
-        <AppLoader session={session}>
+        <AppLoader>
           <AppProvider>
             <RootLayout>{children}</RootLayout>
           </AppProvider>
