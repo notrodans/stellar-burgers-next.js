@@ -1,11 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useConstructor } from "~/entities/constructor";
 import { OrderModalContent } from "~/entities/order";
-import { useGetAuthUser } from "~/shared/api/private-generated";
-import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
+import { CONSTANTS_MAP } from "~/shared/constants";
 import { getApiError } from "~/shared/lib";
 import { Button, Loader, Modal, Paragraph } from "~/shared/ui";
 import { useCreateOrder, useOrderDetails } from "../model";
@@ -16,13 +14,10 @@ export const OrderButton: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const { data: session } = useGetAuthUser();
   const clearConstructor = useConstructor((s) => s.clearConstructor);
 
   const { isOrderable, ingredientIds } = useOrderDetails();
   const { trigger, data, isLoading, error } = useCreateOrder();
-
-  const router = useRouter();
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -35,9 +30,7 @@ export const OrderButton: React.FC = () => {
   return (
     <>
       <Button
-        onClick={
-          session ? handleClick : () => router.replace(ROUTER_PATHS.SIGN_IN)
-        }
+        onClick={handleClick}
         disabled={!isOrderable || isLoading}
         variant={isLoading ? "loading" : "default"}
       >

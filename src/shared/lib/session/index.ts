@@ -1,24 +1,24 @@
-"use server";
-
-import { cookies } from "next/headers";
 import { Payload } from "../jwt";
 import {
-  getSession as getSessionFn,
-  updateSession as updateSessionFn,
+  destroySessionAction,
+  getSessionAction,
+  updateSessionAction,
 } from "./actions";
 import { CreateSessionStorageConfig } from "./types";
 
 function createCookieSessionStorageFactory<T>(
   config: CreateSessionStorageConfig,
 ) {
+  let cachedSession: Payload<T> | undefined = undefined;
   const encodedSecret = new TextEncoder().encode(config.secret);
 
   const getSession = async (): Promise<Payload<T> | undefined> => {
-    return getSessionFn<T>(config.name, encodedSecret);
+    cachedSession = await getSessionAction<T>(config.name, encodedSecret);
+    return cachedSession;
   };
 
   const commitSession = async (data: Payload<T>): Promise<void> => {
-    await updateSessionFn(data, {
+    cachedSession = await updateSessionAction(data, {
       ...config,
       secret: encodedSecret,
     });
@@ -27,18 +27,17 @@ function createCookieSessionStorageFactory<T>(
   const updateCurrentSession = async (
     data: Partial<Payload<T>>,
   ): Promise<void> => {
-    const session = await getSession();
+    const session = cachedSession;
     if (!session) return;
     const newData = { ...session, ...data };
-    await updateSessionFn(newData, {
+    cachedSession = await updateSessionAction(newData, {
       ...config,
       secret: encodedSecret,
     });
   };
 
   const destroySession = async (): Promise<void> => {
-    const cookiesStore = await cookies();
-    cookiesStore.delete(config.name);
+    await destroySessionAction(config.name);
   };
 
   return {

@@ -15,7 +15,7 @@ async function setCookie(
   });
 }
 
-async function getSession<T>(
+async function getSessionAction<T>(
   name: string,
   secret: SecretKey,
 ): Promise<Payload<T> | undefined> {
@@ -24,25 +24,32 @@ async function getSession<T>(
   return await decrypt<T>(session, secret);
 }
 
-async function updateSession<T>(
+async function updateSessionAction<T>(
   data: T,
   config: CookieConfig & { maxAge: number },
-): Promise<void | undefined> {
+): Promise<Payload<T> | undefined> {
   const cookiesStore = await cookies();
   const session = cookiesStore.get(config.name)?.value;
   const secret = config.secret;
   const payload = await decrypt<T>(session, secret);
 
-  const newSession = await encrypt<T>(
-    { ...payload, ...data },
-    {
-      secret: config.secret,
-      maxAge: config.maxAge,
-    },
-  );
+  const newSessionData = { ...payload, ...data };
+
+  const newSession = await encrypt<T>(newSessionData, {
+    secret: config.secret,
+    maxAge: config.maxAge,
+  });
 
   await setCookie(config.name, newSession, {
     ...config,
   });
+
+  return newSessionData;
 }
-export { getSession, updateSession };
+
+async function destroySessionAction(name: string): Promise<void> {
+  const cookiesStore = await cookies();
+  cookiesStore.delete(name);
+}
+
+export { destroySessionAction, getSessionAction, updateSessionAction };
