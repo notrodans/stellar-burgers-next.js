@@ -2,28 +2,22 @@
 
 import { useRef } from "react";
 import {
+  Ingredient,
   type IngredientType,
   createIngredientSections,
 } from "~/entities/ingredient";
-import { useGetIngredients } from "~/shared/api/public-generated";
 import { CONSTANTS_MAP } from "~/shared/constants";
-import { useAppearanceDelay } from "~/shared/lib";
-import { Loader, Paragraph, ScrollArea } from "~/shared/ui";
+import { Paragraph, ScrollArea } from "~/shared/ui";
 import { IngredientDetails } from "~/widgets/ingredient-card";
 import { IngredientTabs } from "~/widgets/ingredient-tabs";
 
-export const IngredientContainer: React.FC = () => {
+export function IngredientContainer({
+  ingredients,
+}: {
+  ingredients: Ingredient[];
+}) {
   const { types } = CONSTANTS_MAP.entities.ingredient;
   const tabsConnectionRef = useRef<HTMLDivElement>(null);
-  const { data, isLoading } = useGetIngredients();
-  const ingredients = data?.data;
-
-  const isAppearanceLoading = useAppearanceDelay(isLoading, {
-    appearenceDelay: 50,
-  });
-
-  if (isAppearanceLoading)
-    return <Loader className="mt-10" text="Загружаю ингредиенты" />;
 
   return (
     <>
@@ -56,4 +50,4 @@ export const IngredientContainer: React.FC = () => {
       </ScrollArea>
     </>
   );
-};
+}

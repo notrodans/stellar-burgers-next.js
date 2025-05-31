@@ -28,14 +28,13 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = undefined;
   return (
     <html lang="en">
       <GetHead />
       <body
         className={`${icelandFont.variable} ${jetBrainsMonoFont.variable} antialiased`}
       >
-        <AppLoader session={session}>
+        <AppLoader>
           <AppProvider>
             <RootLayout>{children}</RootLayout>
           </AppProvider>

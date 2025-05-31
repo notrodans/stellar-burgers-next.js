@@ -5,6 +5,8 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
+        loading:
+          "bg-gradient-to-r from-purple to-accent animate-pulse hover:scale-100",
         default:
           "bg-gradient-to-r from-purple to-accent enabled:hover:shadow-glow",
         secondary: "bg-secondary enabled:hover:shadow-dark",

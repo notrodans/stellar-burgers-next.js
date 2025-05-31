@@ -6,7 +6,7 @@ import { useConstructor } from "~/entities/constructor";
 import { OrderModalContent } from "~/entities/order";
 import { useGetAuthUser } from "~/shared/api/private-generated";
 import { CONSTANTS_MAP, ROUTER_PATHS } from "~/shared/constants";
-import { cn, getApiError } from "~/shared/lib";
+import { getApiError } from "~/shared/lib";
 import { Button, Loader, Modal, Paragraph } from "~/shared/ui";
 import { useCreateOrder, useOrderDetails } from "../model";
 
@@ -39,7 +39,7 @@ export const OrderButton: React.FC = () => {
           session ? handleClick : () => router.replace(ROUTER_PATHS.SIGN_IN)
         }
         disabled={!isOrderable || isLoading}
-        className={cn(isLoading && "animate-pulse")}
+        variant={isLoading ? "loading" : "default"}
       >
         {orderButton}
       </Button>

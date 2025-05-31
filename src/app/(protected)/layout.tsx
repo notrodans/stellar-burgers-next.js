@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useGetAuthUser } from "~/shared/api/private-generated";
 import { ROUTER_PATHS } from "~/shared/constants";
+import { Loader } from "~/shared/ui";
 
 export default function Layout({
   children,
@@ -18,7 +19,7 @@ export default function Layout({
     router.replace(ROUTER_PATHS.SIGN_IN);
   }, [router, isLoading, session]);
 
-  if (isLoading) return <p>Загрузка...</p>;
+  if (isLoading) return <Loader screen />;
 
   return <>{children}</>;
 }

@@ -15,7 +15,7 @@ export default function Layout({
 
   useEffect(() => {
     if (!session) return;
-    router.replace(ROUTER_PATHS.HOME);
+    router.replace(ROUTER_PATHS.PROFILE);
   }, [session, router]);
 
   return <>{children}</>;

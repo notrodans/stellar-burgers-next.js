@@ -12,8 +12,8 @@ export const Loader: React.FC<LoaderProps> = ({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center animate-pulse gap-2 lg:gap-4",
-        screen && "fixed inset-0",
+        "flex flex-col items-center justify-center  gap-2 lg:gap-4",
+        screen && "fixed inset-0 bg-primary",
         className,
       )}
     >
@@ -21,7 +21,7 @@ export const Loader: React.FC<LoaderProps> = ({
         width={96}
         height={96}
         src={slogo}
-        className="h-24 w-24"
+        className="h-24 w-24 animate-pulse"
         alt="preloader"
       />
       <Paragraph>{text}</Paragraph>
