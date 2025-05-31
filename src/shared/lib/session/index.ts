@@ -24,9 +24,7 @@ function createCookieSessionStorageFactory<T>(
     });
   };
 
-  const updateCurrentSession = async (
-    data: Partial<Payload<T>>,
-  ): Promise<void> => {
+  const updateCurrentSession = async (data: Partial<T>): Promise<void> => {
     const session = cachedSession;
     if (!session) return;
     const newData = { ...session, ...data };
